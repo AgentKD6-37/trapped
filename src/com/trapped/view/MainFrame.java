@@ -20,8 +20,8 @@ public class MainFrame extends JFrame {
     Main gHandler;
 
     public JButton startButton, settingButton, exitButton,SUBMITbtn, HELPbtn;
-    public JPanel MenuBG_panel, menuPanel, itemsPanel, MainBG_Panel, cornerLeftPanel, cornerRightPanel, TextBox_panel;
-    public JLabel themeLabel, roomLabel, cornerLeft, cornerRight, keyLabel, matchLabel, laptopLabel, walletLabel, candleLabel, paperLabel, crowbarLabel;
+    public JPanel MenuBG_panel, menuPanel, itemsPanel, MainBG_Panel;
+    public JLabel themeLabel, roomLabel, keyLabel, matchLabel, walletLabel, candleLabel, paperLabel, crowbarLabel;
 
     public JLabel matches, key, wallet, laptop, candle, paper, crowbar, windowWithKey, windowWithoutKey;
     public JTextArea introText = new JTextArea();
@@ -54,11 +54,8 @@ public class MainFrame extends JFrame {
         MenuBG_panel.add(themeLabel);
 
         roomLabel = createJLabel("resources/SwingArt/room1.png");
-        cornerLeft = createJLabel("resources/SwingArt/room1corner2.png");
-        cornerRight = createJLabel("resources/SwingArt/room1corner.png");
         MainBG_Panel.add(roomLabel);
-        MainBG_Panel.add(cornerRight);
-        MainBG_Panel.add(cornerLeft);
+
 
         menuPanel.add(startButton);
         menuPanel.add(settingButton);
@@ -132,8 +129,6 @@ public class MainFrame extends JFrame {
         MenuBG_panel = createJPanel(-10, 0, 500, 750, false);
         menuPanel = createJPanel(150, 350, 100, 180, false);
         menuPanel.setBackground(Color.decode("#302a1e"));
-        cornerRightPanel = createJPanel(10, 40, 460, 500, false);
-        cornerLeftPanel = createJPanel(10, 40, 460, 500, false);
         MainBG_Panel = createJPanel(10, 40, 460, 500, false);
         itemsPanel = createJPanel(320,550,155,155, false);
         itemsPanel.setBackground(Color.black);
@@ -179,6 +174,7 @@ public class MainFrame extends JFrame {
         itemsPanel.setVisible(false);
         inputText.setVisible(false);
         SUBMITbtn.setVisible(false);
+        HELPbtn.setVisible(false);
         introText.setVisible(true);
         writeToIntro(readFileFromResources(fileName));
         introText.addKeyListener(new KeyListener() {
@@ -215,6 +211,8 @@ public class MainFrame extends JFrame {
         MenuBG_panel.setVisible(false);
         itemsPanel.setVisible(false);
         inputText.setVisible(false);
+        SUBMITbtn.setVisible(false);
+        HELPbtn.setVisible(false);
 
         introText.setVisible(true);
         writeToIntro(readFileFromResources(fileName));
@@ -329,13 +327,17 @@ public class MainFrame extends JFrame {
         key = createGameObj(50, 400, 30, 30, "Inspect", "Get", "inspect key", "get key", "resources/SwingArt/key_world_item.png");
         JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
         JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
-
         keyLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect key","drop key","resources/SwingArt/key.png");
         matchLabel=createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect matchbox","drop matchbox","resources/SwingArt/matchbox.png");
         walletLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect wallet","drop wallet","resources/SwingArt/wallet.png");
         crowbarLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect crowbar","drop crowbar","resources/SwingArt/crowbar.png");
         paperLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect paper","drop paper","resources/SwingArt/folded-paper.png");
         candleLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect candle","drop candle","resources/SwingArt/candle-holder.png");
+        JLabel  cornerRight = createJLabel("resources/SwingArt/rightcorner.png");
+        cornerRight.setBounds(380, 5, 90, 500);
+        JLabel cornerLeft = createJLabel("resources/SwingArt/leftcorner.png");
+        cornerLeft.setBounds(0, 5, 90, 500);
+
 
         keyLabel.setVisible(invArr.get(0)); //17
         walletLabel.setVisible(invArr.get(1)); //18
@@ -369,24 +371,31 @@ public class MainFrame extends JFrame {
         MainBG_Panel.add(crowbar);
         MainBG_Panel.add(lftBtn);
         MainBG_Panel.add(rgtBtn);
+        MainBG_Panel.add(cornerLeft);
+        MainBG_Panel.add(cornerRight);
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(roomLabel);
-        MainBG_Panel.add(cornerRight);
-        MainBG_Panel.add(cornerLeft);
 
+
+        // showing the corner of the room when turning around in the room
         if(arr.get(14)){
-            roomLabel.setVisible(true);
+            cornerLeft.setVisible(false);
+            cornerRight.setVisible(false);
             System.out.println("center triggered");
         }else if (arr.get(15)) {
             cornerLeft.setVisible(true);
+            cornerRight.setVisible(false);
             System.out.println("corner left triggered");
         }
         else if (arr.get(16)){
+
+            cornerLeft.setVisible(false);
             cornerRight.setVisible(true);
             System.out.println("corner right triggered");
         }else{
             System.out.println("nothing was triggered");
         }
+
         bed.setVisible(arr.get(0));
         door.setVisible(arr.get(1));
         safe.setVisible(arr.get(2));
@@ -635,45 +644,5 @@ public class MainFrame extends JFrame {
         NavButton.setBorderPainted(false);
         return NavButton;
     }
-
-//    public void createStatusField() {
-//        keyLabel = createJLabel("resources/SwingArt/key.png");
-//        keyLabel.setBounds(350, 550, 50, 50);
-//        keyLabel.setVisible(false);
-//
-//        matchLabel = createJLabel("resources/SwingArt/matchbox.png");
-//        matchLabel.setBounds(350, 550, 50, 50);
-//        matchLabel.setVisible(false);
-//
-//        walletLabel = createJLabel("resources/SwingArt/wallet.png");
-//        walletLabel.setBounds(350, 550, 50, 50);
-//        walletLabel.setVisible(false);
-//
-//        laptopLabel = createJLabel("resources/SwingArt/laptop.png");
-//        laptopLabel.setBounds(350, 550, 50, 50);
-//        laptopLabel.setVisible(false);
-//
-//        crowbarLabel = createJLabel("resources/SwingArt/crowbar.png");
-//        crowbarLabel.setBounds(350, 550, 50, 50);
-//        crowbarLabel.setVisible(false);
-//
-//        paperLabel = createJLabel("resources/SwingArt/folded-paper.png");
-//        paperLabel.setBounds(350, 550, 50, 50);
-//        paperLabel.setVisible(false);
-//
-//        candleLabel = createJLabel("resources/SwingArt/candle-holder.png");
-//        candleLabel.setBounds(350, 550, 50, 50);
-//        candleLabel.setVisible(false);
-//
-//
-//        itemsPanel.add(keyLabel);
-//        itemsPanel.add(matchLabel);
-//        itemsPanel.add(walletLabel);
-//        itemsPanel.add(laptopLabel);
-//        itemsPanel.add(crowbarLabel);
-//        itemsPanel.add(paperLabel);
-//        itemsPanel.add(candleLabel);
-//
-//    }
 
 }

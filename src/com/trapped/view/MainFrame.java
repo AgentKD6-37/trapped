@@ -1,6 +1,7 @@
 package com.trapped.view;
 
 import com.trapped.Main;
+import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
 
 import javax.swing.*;
@@ -13,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainFrame extends JFrame {
@@ -83,7 +86,16 @@ public class MainFrame extends JFrame {
         menuPanel.setVisible(true);
         changeVolume();
         introText.setVisible(false);
-        startButton.addActionListener(e -> introScreen("introstory"));
+        startButton.addActionListener(e -> {introScreen("introstory");
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    loseScreen("exploded");
+                }
+            };
+            timer.schedule(task, 480000);
+        });
         exitButton.addActionListener(e -> System.exit(0));
     }
 
@@ -101,7 +113,7 @@ public class MainFrame extends JFrame {
                         "Please enter a number from -80 to 6 to change volume");
                 VOLUME = Float.parseFloat(name);
                 if (-80.0f <= VOLUME && VOLUME <= 6.0206f) {
-                    Sounds.changeSoundVolume("startsound.wav", 0, VOLUME);
+                    Sounds.changeSoundVolume("creepy_noise_3.wav", 0, VOLUME);
                 } else {
                     JOptionPane.showMessageDialog(frame, "Please enter a number from -80 to 6 to change volume");
                     frame.dispose();
@@ -158,7 +170,16 @@ public class MainFrame extends JFrame {
         menuPanel.setVisible(true);
         SUBMITbtn.setVisible(false);
         HELPbtn.setVisible(false);
-        startButton.addActionListener(e -> introScreen("introstory"));
+        startButton.addActionListener(e -> {introScreen("introstory");
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    loseScreen("exploded");
+                }
+            };
+            timer.schedule(task, 480000);
+    });
         exitButton.addActionListener(e -> System.exit(0));
         settingButton.addActionListener(e -> settingScreen());
     }

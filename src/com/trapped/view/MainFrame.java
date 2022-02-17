@@ -42,7 +42,7 @@ public class MainFrame extends JFrame {
         setUpMainMenu();
         showMainMenu();
         this.gHandler = gHandler;
-        Sounds.changeSoundVolume("creepy_noise_3.wav", 0,-40);
+        Sounds.changeSoundVolume("creepy_noise_3.wav", 0,-20);
     }
 
     public void setUpMainMenu() {
@@ -286,6 +286,44 @@ public class MainFrame extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == 10) {
+                    introScreenAfterPhone("intro_after_phone");
+                } else if (e.getKeyChar() == 27)
+                    System.exit(0);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                System.out.println("you released " + e.getKeyCode());
+
+            }
+        });
+        Sounds.changeSoundVolume("phone.wav", 0, -20);
+    }
+
+    public void introScreenAfterPhone(String fileName) {
+        MainBG_Panel.updateUI();
+        MainBG_Panel.removeAll();
+        MainBG_Panel.repaint();
+        MainBG_Panel.revalidate();
+        menuPanel.setVisible(false);
+        textArea.setVisible(false);
+        MainBG_Panel.setVisible(false);
+        MenuBG_panel.setVisible(false);
+        inputText.setVisible(false);
+        SUBMITbtn.setVisible(false);
+        HELPbtn.setVisible(false);
+
+        introText.setVisible(true);
+        writeToIntro(readFileFromResources(fileName));
+        introText.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == 10) {
                     gameScreen(initArr,invArr);
                 } else if (e.getKeyChar() == 27)
                     System.exit(0);
@@ -297,7 +335,7 @@ public class MainFrame extends JFrame {
 
             }
         });
-        Sounds.changeSoundVolume("phone.wav", 0, -50);
+
     }
 
     private String readFileFromResources(String fileName) {

@@ -4,7 +4,7 @@ import com.trapped.utilities.FileManager;
 import com.trapped.view.MainFrame;
 
 
-public class GameHandler {
+public class Main {
 
     public ActionController aHandler = new ActionController(this);
 
@@ -14,7 +14,7 @@ public class GameHandler {
 
     public static void main(String[] args) {
         FileManager.writeDefaults();
-        new GameHandler();
+        new Main();
     }
 
 //    public GameHandler(){

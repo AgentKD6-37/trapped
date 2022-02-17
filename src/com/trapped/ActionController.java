@@ -14,14 +14,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-import static com.trapped.utilities.TextColor.MAGENTA_UNDERLINE;
-import static com.trapped.utilities.TextColor.RESET;
-
 class ActionController implements ActionListener {
 
-    private static GameHandler gHandler;
+    private static Main gHandler;
 
-    public ActionController(GameHandler gHandler) {
+    public ActionController(Main gHandler) {
         this.gHandler = gHandler;
     }
 
@@ -476,7 +473,6 @@ class ActionController implements ActionListener {
     private static void doorPuzzle() {
         //Final puzzle in the game, can be solved at any time if you know the secret number (104)
         Map<String, Object> furniture = map.get("door");
-        String puzzle_desc = (String) furniture.get("puzzle_desc");
         String puzzle_answer = (String) furniture.get("puzzle_answer");
         String puzzle_reward = (String) furniture.get("puzzle_reward");
         gHandler.mainFrame.writeToTextArea("Please enter the 3-digit passcode." + "You have " + max_attempts +

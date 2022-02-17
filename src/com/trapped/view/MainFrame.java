@@ -1,6 +1,6 @@
 package com.trapped.view;
 
-import com.trapped.GameHandler;
+import com.trapped.Main;
 import com.trapped.utilities.Sounds;
 
 import javax.swing.*;
@@ -11,14 +11,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
 public class MainFrame extends JFrame {
 
-    GameHandler gHandler;
+    Main gHandler;
 
     public JButton startButton, settingButton, exitButton,SUBMITbtn, HELPbtn;
     public JPanel MenuBG_panel, menuPanel, itemsPanel, MainBG_Panel, cornerLeftPanel, cornerRightPanel, TextBox_panel;
@@ -35,7 +34,7 @@ public class MainFrame extends JFrame {
     Container con = getContentPane();
 
 
-    public MainFrame(GameHandler gHandler) {
+    public MainFrame(Main gHandler) {
         super("Trapped");
         setUpMainMenu();
         showMainMenu();

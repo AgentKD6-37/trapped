@@ -1,3 +1,9 @@
 
-           The room exploded.
- 	       You lost the game.
+          The room exploded.
+
+
+
+          You lost the game.
+
+
+          ...

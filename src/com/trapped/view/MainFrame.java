@@ -31,7 +31,8 @@ public class MainFrame extends JFrame {
 
 
     static List<Boolean> initArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false,false,true,false);
-
+    static List<Boolean> invArr = Arrays.asList(false,false,false,false,false,false);
+    Container con = getContentPane();
 
 
     public MainFrame(GameHandler gHandler) {
@@ -42,7 +43,6 @@ public class MainFrame extends JFrame {
     }
 
     public void setUpMainMenu() {
-        Container con = getContentPane();
         // GUI setting up
         setFrameConfigs();
         setAllButtons();
@@ -79,7 +79,7 @@ public class MainFrame extends JFrame {
 
     public void settingScreen() {
         menuPanel.setVisible(true);
-        startButton.addActionListener(e -> gameScreen(initArr));
+        startButton.addActionListener(e -> gameScreen(initArr,invArr));
         exitButton.addActionListener(e -> System.exit(0));
         MainBG_Panel.updateUI();  // reset the panels
         MainBG_Panel.removeAll(); // remove all the layers
@@ -138,7 +138,7 @@ public class MainFrame extends JFrame {
         MainBG_Panel = createJPanel(10, 40, 460, 500, false);
         itemsPanel = createJPanel(320,550,155,155, false);
         itemsPanel.setBackground(Color.black);
-        //itemsPanel.setLayout(new GridLayout(3, 2));
+        itemsPanel.setLayout(new GridLayout(3, 2));
     }
 
     private void setAllButtons() {
@@ -192,7 +192,7 @@ public class MainFrame extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == 10) {
-                    gameScreen(initArr);
+                    gameScreen(initArr,invArr);
                     Sounds.playSounds("phone.wav", 1000);
                 } else if (e.getKeyChar() == 27)
                     System.exit(0);
@@ -253,7 +253,6 @@ public class MainFrame extends JFrame {
         textArea.setVisible(false);
         MainBG_Panel.setVisible(false);
         MenuBG_panel.setVisible(false);
-        itemsPanel.setVisible(false);
         inputText.setVisible(false);
         SUBMITbtn.setVisible(false);
         HELPbtn.setVisible(false);
@@ -269,7 +268,7 @@ public class MainFrame extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == 10) {
-                    gameScreen(initArr);
+                    gameScreen(initArr,invArr);
                 } else if (e.getKeyChar() == 27)
                     System.exit(0);
             }
@@ -295,12 +294,16 @@ public class MainFrame extends JFrame {
 
 
     // Create the game sense
-    public void gameScreen(List<Boolean> arr) {
+    public void gameScreen(List<Boolean> arr, List<Boolean> invArr) {
         introText.setVisible(false);
         MainBG_Panel.updateUI();
         MainBG_Panel.removeAll();
         MainBG_Panel.repaint();
         MainBG_Panel.revalidate();
+        itemsPanel.updateUI();
+        itemsPanel.removeAll();
+        itemsPanel.repaint();
+        itemsPanel.revalidate();
 
         MainBG_Panel.setVisible(true);
         MenuBG_panel.setVisible(false);
@@ -319,7 +322,7 @@ public class MainFrame extends JFrame {
         JLabel chair = createGameObj(60, 250, 200, 200, "Inspect", "inspect chair", "resources/SwingArt/chair1.png");
         JLabel safe = createGameObj(250, 250, 150, 150, "Inspect", "Open", "inspect safe", "riddles safe", "resources/SwingArt/vault1.png");
         JLabel desk = createGameObj(220, 230, 200, 200, "Inspect", "Open", "inspect drawer", "tool puzzle", "resources/SwingArt/desk1.png");
-        crowbar = createGameObj(200, 380, 120, 103, "Inspect", "Get", "inspect crowbar", "get crowbar", "resources/SwingArt/crowbar_world_item.png");
+        crowbar = createGameObj(200, 380, 60, 52, "Inspect", "Get", "inspect crowbar", "get crowbar", "resources/SwingArt/crowbar_world_item.png");
         candle = createGameObj(100, 380, 24, 51, "Inspect", "Get", "inspect candle", "get candle", "resources/SwingArt/candle_world_item.png");
         matches = createGameObj(100, 380, 18, 17, "Inspect", "Get", "inspect matchbox", "get matchbox", "resources/SwingArt/matches.png");
         paper = createGameObj(400, 250, 181, 164, "Inspect", "Get", "inspect paper", "get paper", "resources/SwingArt/paper+world_item.png");
@@ -337,12 +340,12 @@ public class MainFrame extends JFrame {
         paperLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect paper","drop paper","resources/SwingArt/folded-paper.png");
         candleLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect candle","drop candle","resources/SwingArt/candle-holder.png");
 
-        keyLabel.setVisible(false);
-        walletLabel.setVisible(false);
-        paperLabel.setVisible(false);
-        matchLabel.setVisible(false);
-        candleLabel.setVisible(false);
-        crowbarLabel.setVisible(false);
+        keyLabel.setVisible(invArr.get(0)); //17
+        walletLabel.setVisible(invArr.get(1)); //18
+        paperLabel.setVisible(invArr.get(2)); //19
+        matchLabel.setVisible(invArr.get(3)); //20
+        candleLabel.setVisible(invArr.get(4)); //21
+        crowbarLabel.setVisible(invArr.get(5)); //22
 
         itemsPanel.add(keyLabel);
         itemsPanel.add(matchLabel);

@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
     public JTextArea introText = new JTextArea();
     public JTextArea textArea = new JTextArea();
     public TextField inputText = new TextField(20);
-
+    public static float VOLUME;
 
     static List<Boolean> initArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false,false,true,false);
     static List<Boolean> invArr = Arrays.asList(false,false,false,false,false,false);
@@ -102,9 +102,9 @@ public class MainFrame extends JFrame {
             case JOptionPane.YES_OPTION:
                 String name = JOptionPane.showInputDialog(null,
                         "Please enter a number from -80 to 6 to change volume");
-                float num = Float.parseFloat(name);
-                if (-80.0f <= num && num <= 6.0206f) {
-                    Sounds.changeSoundVolume("startsound.wav", 0, num);
+                VOLUME = Float.parseFloat(name);
+                if (-80.0f <= VOLUME && VOLUME <= 6.0206f) {
+                    Sounds.changeSoundVolume("startsound.wav", 0, VOLUME);
                 } else {
                     JOptionPane.showMessageDialog(frame, "Please enter a number from -80 to 6 to change volume");
                     frame.dispose();
@@ -166,7 +166,7 @@ public class MainFrame extends JFrame {
         startButton.addActionListener(e -> introScreen("introstory"));
         exitButton.addActionListener(e -> System.exit(0));
         settingButton.addActionListener(e -> settingScreen());
-        Sounds.changeSoundVolume("startsound.wav", 0, -50);
+        Sounds.changeSoundVolume("startsound.wav", 0, VOLUME);
     }
 
     public void winScreen(String fileName) {
@@ -278,7 +278,7 @@ public class MainFrame extends JFrame {
 
             }
         });
-        Sounds.playSounds("phone.wav", 1000);
+        Sounds.changeSoundVolume("phone.wav", 0, -50);
     }
 
     private String readFileFromResources(String fileName) {

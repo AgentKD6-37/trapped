@@ -193,7 +193,6 @@ public class MainFrame extends JFrame {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == 10) {
                     gameScreen(initArr,invArr);
-                    Sounds.playSounds("phone.wav", 1000);
                 } else if (e.getKeyChar() == 27)
                     System.exit(0);
             }
@@ -279,7 +278,7 @@ public class MainFrame extends JFrame {
 
             }
         });
-
+        Sounds.playSounds("phone.wav", 1000);
     }
 
     private String readFileFromResources(String fileName) {
@@ -316,8 +315,8 @@ public class MainFrame extends JFrame {
 
         HELPbtn.addActionListener(e -> writeToTextArea(readFileFromResources("warning")));
 
-        JLabel lamp = createGameObj(90, 190, 200, 200, "Inspect", "inspect lamp", "resources/SwingArt/lamp1.png");
-        JLabel door = createGameObj(200, 180, 200, 200, "Inspect", "Input Code", "inspect door", "final door", "resources/SwingArt/door1.png");
+        JLabel lamp = createGameObj(130, 250, 200, 200, "Inspect", "inspect lamp", "resources/SwingArt/lamp1.png");
+        JLabel door = createGameObj(130, 250, 200, 200, "Inspect", "Input Code", "inspect door", "final door", "resources/SwingArt/door1.png");
         JLabel bed = createGameObj(130, 250, 200, 200, "Inspect", "inspect bed", "resources/SwingArt/bed1.png");
         JLabel chair = createGameObj(60, 250, 200, 200, "Inspect", "inspect chair", "resources/SwingArt/chair1.png");
         JLabel safe = createGameObj(250, 250, 150, 150, "Inspect", "Open", "inspect safe", "riddles safe", "resources/SwingArt/vault1.png");

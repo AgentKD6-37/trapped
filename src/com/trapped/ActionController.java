@@ -32,6 +32,8 @@ class ActionController implements ActionListener {
     static List<Boolean> lampArr = Arrays.asList(false, false, false, false, true, false, false, false, false, false, false, false, false, false,true,false,false);
     static List<Boolean> chairArr = Arrays.asList(false, false, false, false, false, true, false, false, false, false, false, false, false, false,false,false,true);
     static List<Boolean> windowArr = Arrays.asList(false, false, false, false, false, false, true, false, false, false, false, false, false, false,true,false,false);
+    static List<Boolean> invArr = Arrays.asList(false,false,false,false,false,false);
+
 
     public static String verb;
     public static String noun;
@@ -107,31 +109,37 @@ class ActionController implements ActionListener {
                 gHandler.mainFrame.key.setVisible(true);
                 gHandler.mainFrame.keyLabel.setVisible(false);
                 arr.set(8, true);
+                invArr.set(0,false);
                 break;
             case "wallet":
                 gHandler.mainFrame.wallet.setVisible(true);
                 gHandler.mainFrame.walletLabel.setVisible(false);
                 arr.set(9, true);
+                invArr.set(1,false);
                 break;
             case "crowbar":
                 gHandler.mainFrame.crowbar.setVisible(true);
                 gHandler.mainFrame.crowbarLabel.setVisible(false);
                 arr.set(13, true);
+                invArr.set(5,false);
                 break;
             case "paper":
                 gHandler.mainFrame.paper.setVisible(true);
                 gHandler.mainFrame.paperLabel.setVisible(false);
                 arr.set(10, true);
+                invArr.set(2,false);
                 break;
             case "candle":
                 gHandler.mainFrame.candle.setVisible(true);
                 gHandler.mainFrame.candleLabel.setVisible(false);
                 arr.set(12, true);
+                invArr.set(4,false);
                 break;
             case "matchbox":
                 gHandler.mainFrame.matches.setVisible(true);
                 gHandler.mainFrame.matchLabel.setVisible(false);
                 arr.set(11, true);
+                invArr.set(3,false);
                 break;
         }
     }
@@ -142,31 +150,37 @@ class ActionController implements ActionListener {
                 gHandler.mainFrame.key.setVisible(false);
                 gHandler.mainFrame.keyLabel.setVisible(true);
                 arr.set(8, false);
+                invArr.set(0,true);
                 break;
             case "wallet":
                 gHandler.mainFrame.wallet.setVisible(false);
                 gHandler.mainFrame.walletLabel.setVisible(true);
                 arr.set(9, false);
+                invArr.set(1,true);
                 break;
             case "crowbar":
                 gHandler.mainFrame.crowbar.setVisible(false);
                 gHandler.mainFrame.crowbarLabel.setVisible(true);
                 arr.set(13, false);
+                invArr.set(5,true);
                 break;
             case "paper":
                 gHandler.mainFrame.paper.setVisible(false);
                 gHandler.mainFrame.paperLabel.setVisible(true);
                 arr.set(10, false);
+                invArr.set(2,true);
                 break;
             case "candle":
                 gHandler.mainFrame.candle.setVisible(false);
                 gHandler.mainFrame.candleLabel.setVisible(true);
                 arr.set(12, false);
+                invArr.set(4,true);
                 break;
             case "matchbox":
                 gHandler.mainFrame.matches.setVisible(false);
                 gHandler.mainFrame.matchLabel.setVisible(true);
                 arr.set(11, false);
+                invArr.set(3,true);
                 break;
         }
     }
@@ -312,25 +326,25 @@ class ActionController implements ActionListener {
         gHandler.mainFrame.writeToTextArea("Now you are in front of " + location);
         switch (location) {
             case "bed":
-                gHandler.mainFrame.gameScreen(bedArr);
+                gHandler.mainFrame.gameScreen(bedArr,invArr);
                 break;
             case "door":
-                gHandler.mainFrame.gameScreen(doorArr);
+                gHandler.mainFrame.gameScreen(doorArr,invArr);
                 break;
             case "window":
-                gHandler.mainFrame.gameScreen(windowArr);
+                gHandler.mainFrame.gameScreen(windowArr,invArr);
                 break;
             case "drawer":
-                gHandler.mainFrame.gameScreen(deskArr);
+                gHandler.mainFrame.gameScreen(deskArr,invArr);
                 break;
             case "safe":
-                gHandler.mainFrame.gameScreen(safeArr);
+                gHandler.mainFrame.gameScreen(safeArr,invArr);
                 break;
             case "lamp":
-                gHandler.mainFrame.gameScreen(lampArr);
+                gHandler.mainFrame.gameScreen(lampArr,invArr);
                 break;
             case "chair":
-                gHandler.mainFrame.gameScreen(chairArr);
+                gHandler.mainFrame.gameScreen(chairArr,invArr);
                 break;
         }
     }
@@ -437,6 +451,7 @@ class ActionController implements ActionListener {
                     case "crowbar":
                         gHandler.mainFrame.crowbar.setVisible(false);
                         gHandler.mainFrame.crowbarLabel.setVisible(false);
+                        invArr.set(5,false);
                         gHandler.mainFrame.windowWithKey.setVisible(false);
                         gHandler.mainFrame.windowWithoutKey.setVisible(true);
                         windowArr.set(6, false);
@@ -445,6 +460,7 @@ class ActionController implements ActionListener {
                     case "key":
                         gHandler.mainFrame.key.setVisible(false);
                         gHandler.mainFrame.keyLabel.setVisible(false);
+                        invArr.set(0,false);
                         break;
                 }
                 inventory.add(puzzle_reward_item.get(0));

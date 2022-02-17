@@ -165,7 +165,6 @@ public class MainFrame extends JFrame {
         startButton.addActionListener(e -> introScreen("introstory"));
         exitButton.addActionListener(e -> System.exit(0));
         settingButton.addActionListener(e -> settingScreen());
-        Sounds.changeSoundVolume("startsound.wav", 0, VOLUME);
     }
 
     public void winScreen(String fileName) {

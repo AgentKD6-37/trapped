@@ -1,7 +1,5 @@
 package com.trapped.utilities;
 
-import com.trapped.GameEngine;
-
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;

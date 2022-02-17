@@ -39,6 +39,7 @@ public class MainFrame extends JFrame {
         setUpMainMenu();
         showMainMenu();
         this.gHandler = gHandler;
+        Sounds.changeSoundVolume("creepy_noise_3.wav", 0,-40);
     }
 
     public void setUpMainMenu() {
@@ -218,6 +219,7 @@ public class MainFrame extends JFrame {
 
         introText.setVisible(true);
         writeToIntro(readFileFromResources(fileName));
+        Sounds.changeSoundVolume("EvilLaugh.wav", 0, -50);
         introText.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {

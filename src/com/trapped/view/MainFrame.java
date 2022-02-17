@@ -313,7 +313,7 @@ public class MainFrame extends JFrame {
         SUBMITbtn.setVisible(true);
         HELPbtn.setVisible(true);
 
-        HELPbtn.addActionListener(e -> writeToTextArea(readFileFromResources("warning")));
+        HELPbtn.addActionListener(e -> writeToTextArea(readFileFromResources("help")));
 
         JLabel lamp = createGameObj(130, 190, 190, 190, "Inspect", "inspect lamp", "resources/SwingArt/lamp1.png");
         JLabel door = createGameObj(130, 170, 200, 200, "Inspect", "Input Code", "inspect door", "final door", "resources/SwingArt/door1.png");

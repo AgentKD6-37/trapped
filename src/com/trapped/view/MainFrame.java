@@ -78,12 +78,12 @@ public class MainFrame extends JFrame {
     }
 
     public void settingScreen() {
-        menuPanel.setVisible(true);
+//        menuPanel.setVisible(true);
         startButton.addActionListener(e -> gameScreen(initArr,invArr));
         exitButton.addActionListener(e -> System.exit(0));
         MainBG_Panel.updateUI();  // reset the panels
         MainBG_Panel.removeAll(); // remove all the layers
-        menuPanel.setVisible(true);
+//        menuPanel.setVisible(true);
         changeVolume();
         introText.setVisible(false);
         startButton.addActionListener(e -> {introScreen("introstory");
@@ -142,7 +142,7 @@ public class MainFrame extends JFrame {
         MenuBG_panel = createJPanel(-10, 0, 500, 750, false);
         menuPanel = createJPanel(150, 350, 100, 180, false);
         menuPanel.setBackground(Color.decode("#302a1e"));
-        MainBG_Panel = createJPanel(10, 40, 460, 500, false);
+        MainBG_Panel = createJPanel(12, 40, 460, 500, false);
         itemsPanel = createJPanel(320,550,155,155, false);
         itemsPanel.setBackground(Color.black);
         itemsPanel.setLayout(new GridLayout(3, 2));
@@ -152,10 +152,10 @@ public class MainFrame extends JFrame {
         startButton = createJButton("Start", 100, 40, false, Color.lightGray, Color.decode("#302a1e"));
         settingButton = createJButton("Setting", 100, 40, false, Color.lightGray, Color.decode("#302a1e"));
         exitButton = createJButton("Exit", 100, 40, false, Color.lightGray, Color.black);
-        SUBMITbtn = createJButton("Submit",80,40,false,Color.red,Color.white);
+        SUBMITbtn = createJButton("Submit",80,40,false,Color.red,Color.BLACK);
         SUBMITbtn.setBounds(220,660,80,40);
         HELPbtn=createJButton("Help",60,40,false,Color.red,Color.black);
-        HELPbtn.setBounds(390,2,80,40);
+        HELPbtn.setBounds(392,2,80,40);
     }
 
 
@@ -166,8 +166,9 @@ public class MainFrame extends JFrame {
         MainBG_Panel.repaint();
         MainBG_Panel.revalidate();
 
-        MenuBG_panel.setVisible(true);
         menuPanel.setVisible(true);
+        MenuBG_panel.setVisible(true);
+
         SUBMITbtn.setVisible(false);
         HELPbtn.setVisible(false);
         startButton.addActionListener(e -> {introScreen("introstory");
@@ -476,7 +477,7 @@ public class MainFrame extends JFrame {
     public void writeToTextArea(String s) {
         textArea.setText(s);
         textArea.setFont(new Font("Arial", Font.BOLD, 12));
-        textArea.setBounds(10, 550, 300, 100);
+        textArea.setBounds(12, 550, 300, 100);
         textArea.setBackground(Color.black);
         textArea.setForeground(Color.white);
         textArea.setWrapStyleWord(true);
@@ -487,8 +488,8 @@ public class MainFrame extends JFrame {
     public void inputTextField() {
         inputText.setFont(new Font("Arial", Font.BOLD, 13));
         inputText.setForeground(Color.red);
-        inputText.setBackground(Color.white);
-        inputText.setBounds(10, 660, 200, 40);
+        inputText.setBackground(Color.black);
+        inputText.setBounds(12, 660, 200, 40);
         inputText.setVisible(false);
         // to access the TextField using " getText() [ for example: inputText.getText() ]
 

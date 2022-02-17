@@ -228,7 +228,7 @@ class ActionController implements ActionListener {
         if (inventory.contains(item.toLowerCase())) {
             if (inventory.contains(item.toLowerCase())) {
                 inventory.remove(item);
-                Sounds.playSounds("drop.wav", 1000);
+                Sounds.changeSoundVolume("drop.wav",0,-20);
                 furniture_items.add(item);
                 furniture.put("furniture_items", furniture_items);
                 map.put(location, furniture);
@@ -453,6 +453,7 @@ class ActionController implements ActionListener {
                         gHandler.mainFrame.windowWithoutKey.setVisible(true);
                         windowArr.set(6, false);
                         windowArr.set(7, true);
+                        Sounds.changeSoundVolume("glass_Breaking.wav",0,-20);
                         break;
                     case "key":
                         gHandler.mainFrame.key.setVisible(false);

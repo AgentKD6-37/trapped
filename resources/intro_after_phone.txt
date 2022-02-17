@@ -1,13 +1,16 @@
-You pick up the phone, there is a creepy voice on the other end:
-WE WILL TRAP ALL THE SOFTWARE DEVELOPERS. THE DOOR IS LOCKED. IF YOU ARE SMART ENOUGH, TRY TO
-LOOK FOR CLUES AND HELP YOURSELF. I DON'T THINK YOU CAN ESCAPE! ENJOY YOUR STAY HERE! HA HA HA...
+You pick up the phone,
+there is a creepy voice on the other end:
+WE WILL TRAP ALL THE SOFTWARE DEVELOPERS.
+THE DOOR IS LOCKED. IF YOU ARE SMART ENOUGH,
+TRY TO LOOK FOR CLUES AND HELP YOURSELF.
+I DON'T THINK YOU CAN ESCAPE!
+ENJOY YOUR STAY HERE! HA HA HA...
 
-You cannot believe this. You hang up the phone, and go to the door.
+You hang up the phone, and go to the door.
 It IS LOCKED! The door lock requires a 3 digit password.
 You try some random numbers, but none of them work.
 
 Fine....
 
-You decide to try....
 
 Press Enter to continue

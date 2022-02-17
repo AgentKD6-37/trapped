@@ -193,7 +193,6 @@ public class MainFrame extends JFrame {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == 10) {
                     gameScreen(initArr,invArr);
-                    Sounds.playSounds("phone.wav", 1000);
                 } else if (e.getKeyChar() == 27)
                     System.exit(0);
             }
@@ -279,7 +278,7 @@ public class MainFrame extends JFrame {
 
             }
         });
-
+        Sounds.playSounds("phone.wav", 1000);
     }
 
     private String readFileFromResources(String fileName) {
@@ -316,19 +315,19 @@ public class MainFrame extends JFrame {
 
         HELPbtn.addActionListener(e -> writeToTextArea(readFileFromResources("warning")));
 
-        JLabel lamp = createGameObj(90, 190, 200, 200, "Inspect", "inspect lamp", "resources/SwingArt/lamp1.png");
-        JLabel door = createGameObj(200, 180, 200, 200, "Inspect", "Input Code", "inspect door", "final door", "resources/SwingArt/door1.png");
+        JLabel lamp = createGameObj(130, 250, 200, 200, "Inspect", "inspect lamp", "resources/SwingArt/lamp1.png");
+        JLabel door = createGameObj(130, 250, 200, 200, "Inspect", "Input Code", "inspect door", "final door", "resources/SwingArt/door1.png");
         JLabel bed = createGameObj(130, 250, 200, 200, "Inspect", "inspect bed", "resources/SwingArt/bed1.png");
-        JLabel chair = createGameObj(60, 250, 200, 200, "Inspect", "inspect chair", "resources/SwingArt/chair1.png");
-        JLabel safe = createGameObj(250, 250, 150, 150, "Inspect", "Open", "inspect safe", "riddles safe", "resources/SwingArt/vault1.png");
-        JLabel desk = createGameObj(220, 230, 200, 200, "Inspect", "Open", "inspect drawer", "tool puzzle", "resources/SwingArt/desk1.png");
+        JLabel chair = createGameObj(170, 250, 200, 200, "Inspect", "inspect chair", "resources/SwingArt/chair1.png");
+        JLabel safe = createGameObj(150, 250, 150, 150, "Inspect", "Open", "inspect safe", "riddles safe", "resources/SwingArt/vault1.png");
+        JLabel desk = createGameObj(130, 250, 200, 200, "Inspect", "Open", "inspect drawer", "tool puzzle", "resources/SwingArt/desk1.png");
         crowbar = createGameObj(200, 380, 60, 52, "Inspect", "Get", "inspect crowbar", "get crowbar", "resources/SwingArt/crowbar_world_item.png");
         candle = createGameObj(100, 380, 24, 51, "Inspect", "Get", "inspect candle", "get candle", "resources/SwingArt/candle_world_item.png");
         matches = createGameObj(100, 380, 18, 17, "Inspect", "Get", "inspect matchbox", "get matchbox", "resources/SwingArt/matches.png");
         paper = createGameObj(400, 250, 181, 164, "Inspect", "Get", "inspect paper", "get paper", "resources/SwingArt/paper+world_item.png");
         wallet = createGameObj(210, 245, 36, 31, "Inspect", "Get", "inspect wallet", "get wallet", "resources/SwingArt/wallet_world_item.png");
-        windowWithKey = createGameObj(100, 210, 100, 100, "inspect", "Break", "inspect window", "tool puzzle", "resources/SwingArt/window_world_item_with_key2.png");
-        windowWithoutKey = createGameObj(100, 210, 100, 100, "inspect", "inspect window", "resources/SwingArt/window_world_item_no_key2.png");
+        windowWithKey = createGameObj(170, 250, 100, 100, "inspect", "Break", "inspect window", "tool puzzle", "resources/SwingArt/window_world_item_with_key2.png");
+        windowWithoutKey = createGameObj(170, 250, 100, 100, "inspect", "inspect window", "resources/SwingArt/window_world_item_no_key2.png");
         key = createGameObj(60, 250, 30, 30, "Inspect", "Get", "inspect key", "get key", "resources/SwingArt/key_world_item.png");
         JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
         JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");

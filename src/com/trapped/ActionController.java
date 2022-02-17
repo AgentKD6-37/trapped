@@ -421,7 +421,7 @@ class ActionController implements ActionListener {
         Boolean solved = false;
         if (((inventory.contains("crowbar") && location.equals("safe")) ||
                 (inventory.contains("key") && location.equals("window")) ||
-                (inventory.contains("paper") && location.equals("drawer")))) {
+                (inventory.contains("paper") && location.equals("desk")))) {
             gHandler.mainFrame.writeToTextArea("The puzzle has been solved. You should focus on escaping!");
             solved = true;
         }

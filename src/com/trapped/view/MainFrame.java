@@ -19,14 +19,19 @@ import java.util.List;
 public class MainFrame extends JFrame {
 
     GameHandler gHandler;
-    public JButton startButton, settingButton, exitButton,SUBMITbtn;
+
+    public JButton startButton, settingButton, exitButton,SUBMITbtn, HELPbtn;
     public JPanel MenuBG_panel, menuPanel, itemsPanel, MainBG_Panel, cornerLeftPanel, cornerRightPanel, TextBox_panel;
     public JLabel themeLabel, roomLabel, cornerLeft, cornerRight, keyLabel, matchLabel, laptopLabel, walletLabel, candleLabel, paperLabel, crowbarLabel;
+
     public JLabel matches, key, wallet, laptop, candle, paper, crowbar, windowWithKey, windowWithoutKey;
     public JTextArea introText = new JTextArea();
     public JTextArea textArea = new JTextArea();
     public TextField inputText = new TextField(20);
+
+
     static List<Boolean> initArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false,false,true,false);
+
 
 
     public MainFrame(GameHandler gHandler) {
@@ -66,6 +71,7 @@ public class MainFrame extends JFrame {
         con.add(textArea);
         con.add(inputText);
         con.add(SUBMITbtn);
+        con.add(HELPbtn);
         con.add(itemsPanel);
         con.add(introText);
         setVisible(true);
@@ -141,6 +147,8 @@ public class MainFrame extends JFrame {
         exitButton = createJButton("Exit", 100, 40, false, Color.lightGray, Color.black);
         SUBMITbtn = createJButton("Submit",80,40,false,Color.red,Color.white);
         SUBMITbtn.setBounds(220,660,80,40);
+        HELPbtn=createJButton("Help",60,40,false,Color.red,Color.black);
+        HELPbtn.setBounds(390,2,80,40);
     }
 
 
@@ -154,6 +162,7 @@ public class MainFrame extends JFrame {
         MenuBG_panel.setVisible(true);
         menuPanel.setVisible(true);
         SUBMITbtn.setVisible(false);
+        HELPbtn.setVisible(false);
         startButton.addActionListener(e -> introScreen("introstory"));
         exitButton.addActionListener(e -> System.exit(0));
         settingButton.addActionListener(e -> settingScreen());
@@ -247,6 +256,7 @@ public class MainFrame extends JFrame {
         itemsPanel.setVisible(false);
         inputText.setVisible(false);
         SUBMITbtn.setVisible(false);
+        HELPbtn.setVisible(false);
 
         introText.setVisible(true);
         writeToIntro(readFileFromResources(fileName));
@@ -299,6 +309,9 @@ public class MainFrame extends JFrame {
         itemsPanel.setVisible(true);
         inputText.setVisible(true);
         SUBMITbtn.setVisible(true);
+        HELPbtn.setVisible(true);
+
+        HELPbtn.addActionListener(e -> writeToTextArea(readFileFromResources("warning")));
 
         JLabel lamp = createGameObj(90, 190, 200, 200, "Inspect", "inspect lamp", "resources/SwingArt/lamp1.png");
         JLabel door = createGameObj(200, 180, 200, 200, "Inspect", "Input Code", "inspect door", "final door", "resources/SwingArt/door1.png");
@@ -430,7 +443,7 @@ public class MainFrame extends JFrame {
     // method creating the text field
     public void writeToTextArea(String s) {
         textArea.setText(s);
-        textArea.setFont(new Font("Arial", Font.BOLD, 15));
+        textArea.setFont(new Font("Arial", Font.BOLD, 12));
         textArea.setBounds(10, 550, 300, 100);
         textArea.setBackground(Color.black);
         textArea.setForeground(Color.white);

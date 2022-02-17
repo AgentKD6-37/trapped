@@ -42,7 +42,7 @@ public class MainFrame extends JFrame {
         setUpMainMenu();
         showMainMenu();
         this.gHandler = gHandler;
-        Sounds.changeSoundVolume("creepy_noise_3.wav", 0,-20);
+        Sounds.changeSoundVolumeLoop("creepy_noise_3.wav", 0,-20);
     }
 
     public void setUpMainMenu() {

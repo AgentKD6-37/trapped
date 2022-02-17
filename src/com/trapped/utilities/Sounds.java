@@ -37,6 +37,23 @@ public class Sounds {
         }
     }
 
+    public static void changeSoundVolumeLoop(String location_soundFile, int milliseconds, float volume){
+        File file = new File("resources/sounds/"+location_soundFile);
+
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            FloatControl gainControl =
+                    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(volume);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            Thread.sleep(milliseconds);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static boolean checkIfFileExists(String location_soundFile){
         File tempFile = new File("resources/sounds/"+location_soundFile);
         return tempFile.exists();

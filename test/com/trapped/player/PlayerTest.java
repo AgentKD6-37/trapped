@@ -19,8 +19,8 @@
 //
 //import static org.junit.Assert.*;
 //
-//public class ActionControllerTest {
-//    ActionController ac;
+//public class PlayerTest {
+//    Player player;
 //
 //    @Before
 //    public void setup() {
@@ -73,7 +73,7 @@
 //    @Test
 //    public void playerShouldPickUpItemWhenUserPicksUpItem() {
 //        player.location = "bed";
-//        assertEquals(true,player.pickUpItem("matches"));
+//        assertEquals(true,player.pickUpItem("matchbox"));
 //    }
 //
 //    @Test

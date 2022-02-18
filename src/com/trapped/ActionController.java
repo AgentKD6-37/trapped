@@ -30,6 +30,10 @@ class ActionController implements ActionListener {
     static List<Boolean> chairArr = Arrays.asList(false, false, false, false, false, true, false, false, false, false, false, false, false, false,false,false,true);
     static List<Boolean> windowArr = Arrays.asList(false, false, false, false, false, false, true, false, false, false, false, false, false, false,true,false,false);
     static List<Boolean> invArr = Arrays.asList(false,false,false,false,false,false);
+    static Boolean crowbarObtained = false;
+    static boolean firstAttemptComplete = false;
+    static boolean secondAttemptComplete = false;
+    static boolean thirdAttemptComplete = false;
 
 
     public static String verb;
@@ -419,9 +423,8 @@ class ActionController implements ActionListener {
     public static boolean puzzleSolved() {
         //checks to see if the player has solved any of the puzzles, if they have, returns true to the caller!
         Boolean solved = false;
-        if (((inventory.contains("crowbar") && location.equals("safe")) ||
-                (inventory.contains("key") && location.equals("window")) ||
-                (inventory.contains("paper") && location.equals("desk")))) {
+        if (((inventory.contains("key") && location.equals("window")) ||
+                (inventory.contains("paper") && location.equals("desk")))||crowbarObtained) {
             gHandler.mainFrame.writeToTextArea("The puzzle has been solved. You should focus on escaping!");
             solved = true;
         }
@@ -454,6 +457,7 @@ class ActionController implements ActionListener {
                         windowArr.set(6, false);
                         windowArr.set(7, true);
                         Sounds.changeSoundVolume("glass_Breaking.wav",0,-20);
+                        crowbarObtained = true;
                         break;
                     case "key":
                         gHandler.mainFrame.key.setVisible(false);
@@ -476,8 +480,7 @@ class ActionController implements ActionListener {
         Map<String, Object> furniture = map.get("door");
         String puzzle_answer = (String) furniture.get("puzzle_answer");
         String puzzle_reward = (String) furniture.get("puzzle_reward");
-        gHandler.mainFrame.writeToTextArea("Please enter the 3-digit passcode." + "You have " + max_attempts +
-                " attempts remaining. If you'll like to try later, enter 'later' in the test box below");
+        response(3);
         gHandler.mainFrame.SUBMITbtn.addActionListener(e -> {
             ANSWER = gHandler.mainFrame.inputText.getText();
 
@@ -488,15 +491,23 @@ class ActionController implements ActionListener {
                     gHandler.mainFrame.writeToTextArea(puzzle_reward + "You won the game! Thanks for playing!");
                     System.out.println("game won");
                     gHandler.mainFrame.winScreen("end_game");
-                } else if (max_attempts == 0) {
+                } else if (secondAttemptComplete) {
                     gHandler.mainFrame.writeToTextArea("You lost the game! You are Trapped. Please try again later.");
                     gHandler.mainFrame.loseScreen("exploded");
+                } else if (firstAttemptComplete){
+                    response(1);
+                    secondAttemptComplete = true;
                 } else {
-                    max_attempts--;
-                    gHandler.mainFrame.writeToTextArea("Wrong password. Try again next time! " + max_attempts + " attempts remaining");
+                    response(2);
+                    firstAttemptComplete = true;
                 }
             }
         });
+    }
+
+    private static void response(Integer num){
+        gHandler.mainFrame.writeToTextArea("Please enter the 3-digit passcode." + "You have " + num +
+                " attempts remaining. If you'll like to try later, enter 'later' in the test box below");
     }
 
     private static List<Boolean> getLocationBoolArr(String location) {

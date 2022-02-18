@@ -25,7 +25,7 @@ public class MainFrame extends JFrame {
     public JPanel MenuBG_panel, menuPanel, itemsPanel, MainBG_Panel;
     public JLabel themeLabel, roomLabel, keyLabel, matchLabel, walletLabel, candleLabel, paperLabel, crowbarLabel;
 
-    public JLabel matches, key, wallet, laptop, candle, paper, crowbar, windowWithKey, windowWithoutKey;
+    public JLabel matches, key, wallet, candle, paper, crowbar, windowWithKey, windowWithoutKey;
     public JTextArea introText = new JTextArea();
     public JTextArea textArea = new JTextArea();
     public TextField inputText = new TextField(20);
@@ -49,7 +49,6 @@ public class MainFrame extends JFrame {
         setFrameConfigs();
         setAllButtons();
         setAllPanels();
-//        createStatusField();
         inputTextField();
 
         // ---- LABELS ADDED TO PANELS ----
@@ -75,28 +74,28 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
-    public void settingScreen() {
-//        menuPanel.setVisible(true);
-        startButton.addActionListener(e -> gameScreen(initArr, invArr));
-        exitButton.addActionListener(e -> System.exit(0));
-        MainBG_Panel.updateUI();  // reset the panels
-        MainBG_Panel.removeAll(); // remove all the layers
-//        menuPanel.setVisible(true);
-        changeVolume();
-        introText.setVisible(false);
-        startButton.addActionListener(e -> {
-            introScreen("introstory");
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-                    loseScreen("exploded");
-                }
-            };
-            timer.schedule(task, 480000);
-        });
-        exitButton.addActionListener(e -> System.exit(0));
-    }
+//    public void settingScreen() {
+////        menuPanel.setVisible(true);
+////        startButton.addActionListener(e -> gameScreen(initArr, invArr));
+////        exitButton.addActionListener(e -> System.exit(0));
+//        MainBG_Panel.updateUI();  // reset the panels
+//        MainBG_Panel.removeAll(); // remove all the layers
+////        menuPanel.setVisible(true);
+//        changeVolume();
+//        introText.setVisible(false);
+//        startButton.addActionListener(e -> {
+//            introScreen("introstory");
+//            Timer timer = new Timer();
+//            TimerTask task = new TimerTask() {
+//                @Override
+//                public void run() {
+//                    loseScreen("exploded");
+//                }
+//            };
+//            timer.schedule(task, 480000);
+//        });
+//        exitButton.addActionListener(e -> System.exit(0));
+//    }
 
     public void changeVolume() {
         JFrame frame = new JFrame("Volume Changer");
@@ -191,7 +190,6 @@ public class MainFrame extends JFrame {
             timer.schedule(task, 480000);
         });
         exitButton.addActionListener(e -> System.exit(0));
-        SOUNDbtn.addActionListener(e -> settingScreen());
     }
 
     public void winScreen(String fileName) {
@@ -385,7 +383,7 @@ public class MainFrame extends JFrame {
         HELPbtn.setVisible(true);
         SOUNDbtn.setVisible(true);
 
-//        SOUNDbtn.addActionListener();
+        SOUNDbtn.addActionListener(e -> changeVolume());
         HELPbtn.addActionListener(e -> writeToTextArea(readFileFromResources("help")));
 
         JLabel lamp = createGameObj(130, 190, 190, 190, "Inspect", "inspect lamp", "resources/SwingArt/lamp1.png");

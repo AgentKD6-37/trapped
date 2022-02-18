@@ -13,27 +13,23 @@ The game takes place in a mysterious room. The player has to explore the room, l
 
 ## Release Version
 Version 2.1
-> 
-> whats new?
-> 
-> Item persistence!
-> 
-> Less bugs!
-> 
-> Volume control!
-> 
-> Did we mention, less bugs?
+What's new:
+> Full release complete!
+> Win or lose by guessing random door codes
+> Wait 8 minutes and explode!
+> Listen to creepy noises!
+> Break windows with correctly sized crowbars!
 
 ## Contributors
 ### v1 Team
 [Justin Hammel](https://github.com/thirdeye18), [Sushma Pakhreen](https://github.com/spakhre), [Zoe Ji](https://github.com/zoeji569)
-### v2 Team
+### v2 Team (Current Dev team for this fork)
 [Fan Wu](https://github.com/fanwu513), [Michael Stack](https://github.com/AgentKD6-37), [Zicheng Li](https://github.com/thrashghost)
 
 ## Quickstart
 *Download the zip file in the latest release
 *Unzip the file
-*double click the Run command
+*double click the jar
 
 ## Libraries
 *GSON 2.8.9

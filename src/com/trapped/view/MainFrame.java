@@ -209,7 +209,7 @@ public class MainFrame extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == 10) {
-                    gameScreen(initArr,invArr);
+                    System.exit(0);
                 } else if (e.getKeyChar() == 27)
                     System.exit(0);
             }

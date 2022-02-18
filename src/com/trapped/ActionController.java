@@ -3,11 +3,8 @@ package com.trapped;
 import com.google.gson.Gson;
 import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
-import com.trapped.utilities.TextColor;
 import com.trapped.utilities.TextParser;
-import com.trapped.view.MainFrame;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -17,28 +14,38 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
-import static com.trapped.utilities.TextColor.MAGENTA_UNDERLINE;
-import static com.trapped.utilities.TextColor.RESET;
-
 class ActionController implements ActionListener {
 
-    private static GameHandler gHandler;
+    private static Main gHandler;
 
-    public ActionController(GameHandler gHandler) {
+    public ActionController(Main gHandler) {
         this.gHandler = gHandler;
     }
+
+    static List<Boolean> bedArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false);
+    static List<Boolean> doorArr = Arrays.asList(false, true, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false);
+    static List<Boolean> safeArr = Arrays.asList(false, false, true, false, false, false, false, false, false, false, false, false, false, false, true, false, false);
+    static List<Boolean> deskArr = Arrays.asList(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, true);
+    static List<Boolean> lampArr = Arrays.asList(false, false, false, false, true, false, false, false, false, false, false, false, false, false, true, false, false);
+    static List<Boolean> chairArr = Arrays.asList(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, true);
+    static List<Boolean> windowArr = Arrays.asList(false, false, false, false, false, false, true, false, false, false, false, false, false, false, true, false, false);
+    static List<Boolean> invArr = Arrays.asList(false, false, false, false, false, false);
+    static Boolean crowbarObtained = false;
+    static Boolean paperObtained = false;
+    static Boolean keyObtained = false;
+    static boolean firstAttemptComplete = false;
+    static boolean secondAttemptComplete = false;
+    static boolean doorInteractedBefore = false;
+
 
     public static String verb;
     public static String noun;
     public static String location = "bed";
-    public static float volume;
     public static List<String> inventory = new ArrayList<>();
     private static String furniturePuzzlesJsonPath = "./resources/furniture_puzzles.json";
     private static int max_attempts = 3;
     private static String ANSWER;
     private static Scanner scan = new Scanner(System.in);
-
     static Map<String, Map<String, Object>> map = furniturePuzzleGenerator();
 
     //Utility class for the map generated above, trying to ensure json file is closed
@@ -58,119 +65,125 @@ class ActionController implements ActionListener {
     // And if the furniture has a puzzle, it will show the puzzle's description.
     private static void inspectItem(String noun) {
         //furniture
-        Map<String, Object> furniture = map.get(noun);
-        if (noun.equals("inventory")) {
-            checkCurrentInventory();
-        } else if (map.containsKey(noun)) {
-            location = noun;
-            if (furniture.get("furniture_items") != null) {
-                ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
-                if (!furniture_items.isEmpty()) {
-                    roomWithItems(noun);
+        Map<String, Object> furniture = map.get(location);
+        ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
+        switch (noun) {
+            case "bed":
+            case "door":
+            case "window":
+            case "drawer":
+            case "safe":
+            case "lamp":
+            case "chair":
+                if (furniture_items.isEmpty() || furniture_items == null) {
+                    noItemsInRoom(location);
+                } else {
+                    roomWithItems(location);
                 }
-                if (furniture_items.isEmpty()) {
-                    noItemsInRoom(noun);
-                }
-            } else if (furniture.get("furniture_items") == null) {
-                noItemsInRoom(noun);
-            }
+                break;
+            case "paper":
+                gHandler.mainFrame.writeToTextArea("A Piece of paper with the numbers 104 on it.");
+                break;
+            case "crowbar":
+                gHandler.mainFrame.writeToTextArea("Be careful with that, Mr. Freeman...");
+                break;
+            default:
+                gHandler.mainFrame.writeToTextArea("It's just an ordinary " + noun + ".");
         }
-
-        //item
-
-        else if (map.get(location).get("furniture_items") != null) {
-            ArrayList<String> furniture_items = (ArrayList<String>) map.get(location).get("furniture_items");
-            if (furniture_items.contains(noun)) {
-                gHandler.mainFrame.writeToTextArea("It's just a " + noun);
-
-            } else if (inventory.contains(noun)) {
-                gHandler.mainFrame.writeToTextArea("It's just a " + noun);
-
-            } else {
-                gHandler.mainFrame.writeToTextArea("Sorry, I don't understand your input, please enter again. ");
-                FileManager.getResource("commands.txt");
-            }
-
-        } else {
-            gHandler.mainFrame.writeToTextArea("Sorry, I don't understand your input, please enter again. ");
-            FileManager.getResource("commands.txt");
-        }
-
     }
 
     private static void roomWithItems(String something) {
         Map<String, Object> furniture = map.get(something);
-        String furniture_picture = (String) furniture.get("furniture_picture");
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
-        FileManager.getResource(furniture_picture);
-        gHandler.mainFrame.writeToTextArea("You see: " + furniture_items + ".");
-        for (String item: furniture_items) {
-            unhideItemOnNavScreen(item);
+        String furniture_desc = (String) furniture.get("furniture_desc");
+        if (location.equals("window") && keyObtained) {
+            gHandler.mainFrame.writeToTextArea("Someone broke this window!..." + "\nYou see: " + furniture_items + ".");
+        } else {
+            gHandler.mainFrame.writeToTextArea(furniture_desc + "\nYou see: " + furniture_items + ".");
+            for (String item : furniture_items) {
+                unhideItemOnNavScreen(item, getLocationBoolArr(location));
+            }
         }
     }
 
-    private static void unhideItemOnNavScreen(String item){
+    private static void unhideItemOnNavScreen(String item, List<Boolean> arr) {
         switch (item) {
             case "key":
                 gHandler.mainFrame.key.setVisible(true);
                 gHandler.mainFrame.keyLabel.setVisible(false);
+                arr.set(8, true);
+                invArr.set(0, false);
                 break;
             case "wallet":
                 gHandler.mainFrame.wallet.setVisible(true);
                 gHandler.mainFrame.walletLabel.setVisible(false);
+                arr.set(9, true);
+                invArr.set(1, false);
                 break;
             case "crowbar":
                 gHandler.mainFrame.crowbar.setVisible(true);
                 gHandler.mainFrame.crowbarLabel.setVisible(false);
+                arr.set(13, true);
+                invArr.set(5, false);
                 break;
-            case "a piece of papert with number 104":
+            case "paper":
                 gHandler.mainFrame.paper.setVisible(true);
                 gHandler.mainFrame.paperLabel.setVisible(false);
+                arr.set(10, true);
+                invArr.set(2, false);
                 break;
             case "candle":
                 gHandler.mainFrame.candle.setVisible(true);
                 gHandler.mainFrame.candleLabel.setVisible(false);
+                arr.set(12, true);
+                invArr.set(4, false);
                 break;
-            case "laptop":
-                gHandler.mainFrame.laptop.setVisible(true);
-                gHandler.mainFrame.laptopLabel.setVisible(false);
-                break;
-            case "matches":
+            case "matchbox":
                 gHandler.mainFrame.matches.setVisible(true);
                 gHandler.mainFrame.matchLabel.setVisible(false);
+                arr.set(11, true);
+                invArr.set(3, false);
                 break;
         }
     }
 
-    private static void hideItemOnNavScreen(String item){
+    private static void hideItemOnNavScreen(String item, List<Boolean> arr) {
         switch (item) {
             case "key":
                 gHandler.mainFrame.key.setVisible(false);
                 gHandler.mainFrame.keyLabel.setVisible(true);
+                arr.set(8, false);
+                invArr.set(0, true);
                 break;
             case "wallet":
                 gHandler.mainFrame.wallet.setVisible(false);
                 gHandler.mainFrame.walletLabel.setVisible(true);
+                arr.set(9, false);
+                invArr.set(1, true);
                 break;
             case "crowbar":
                 gHandler.mainFrame.crowbar.setVisible(false);
                 gHandler.mainFrame.crowbarLabel.setVisible(true);
+                arr.set(13, false);
+                invArr.set(5, true);
                 break;
-            case "a piece of papert with number 104":
+            case "paper":
                 gHandler.mainFrame.paper.setVisible(false);
                 gHandler.mainFrame.paperLabel.setVisible(true);
+                arr.set(10, false);
+                invArr.set(2, true);
                 break;
             case "candle":
                 gHandler.mainFrame.candle.setVisible(false);
                 gHandler.mainFrame.candleLabel.setVisible(true);
+                arr.set(12, false);
+                invArr.set(4, true);
                 break;
-            case "laptop":
-                gHandler.mainFrame.laptop.setVisible(false);
-                gHandler.mainFrame.laptopLabel.setVisible(true);
-                break;
-            case "matches":
+            case "matchbox":
                 gHandler.mainFrame.matches.setVisible(false);
                 gHandler.mainFrame.matchLabel.setVisible(true);
+                arr.set(11, false);
+                invArr.set(3, true);
                 break;
         }
     }
@@ -178,10 +191,13 @@ class ActionController implements ActionListener {
 
     private static void noItemsInRoom(String something) {
         Map<String, Object> furniture = map.get(something);
-        String furniture_picture = (String) furniture.get("furniture_picture");
-
-        FileManager.getResource(furniture_picture);
-        gHandler.mainFrame.writeToTextArea("Inspecting...\nNo items found here.");
+        if (location.equals("window") && keyObtained) {
+            gHandler.mainFrame.writeToTextArea("Someone broke this window!..." + "\nNo items found here.");
+        } else {
+            String furniture_desc = (String) furniture.get("furniture_desc");
+            System.out.println("key obtained is: " + keyObtained);
+            gHandler.mainFrame.writeToTextArea(furniture_desc + "\nNo items found here.");
+        }
     }
 
     // check current inventory
@@ -189,54 +205,10 @@ class ActionController implements ActionListener {
         gHandler.mainFrame.writeToTextArea("Your current inventory: " + inventory);
     }
 
-    // pickup item method.
-    public static boolean pickUpItem(String noun) {
-        boolean success = false;
 
-        if (map.get(location) != null) {
-            Map<String, Object> furniture = map.get(location);
-            ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
-            // if inventory is full. player need to drop an item, then item found in current location will be added to inventory.
-            if (!furniture_items.isEmpty() && !furniture_items.contains(null) && furniture_items.contains(noun) ) {
-                while (inventory.size() >= 5) {
-                    gHandler.mainFrame.writeToTextArea("You can't hold more than 5 items. Please drop one item.");
-                    gHandler.mainFrame.writeToTextArea("Which item would you like to drop?");
-                    String selection = scan.nextLine();
-                    while (!inventory.contains(selection.toLowerCase())) {
-                        gHandler.mainFrame.writeToTextArea("Sorry, the item you entered is not in your inventory, please select again.");
-                        selection = scan.nextLine();
-                    }
-                    dropItem(selection);
-                }
-                addItemAndUpdateJson(furniture_items, furniture, noun);
-                success = true;
-            }
-            //if furniture has an item available to be picked up
-            else if (!inventory.contains(noun) && !furniture_items.contains(null) && furniture_items.contains(noun)) {
-                gHandler.mainFrame.writeToTextArea("\nDo you want to add " + noun + " to inventory? [Y/N]");
-                String response = scan.nextLine();
-                if (response.isEmpty()) {
-                    gHandler.mainFrame.writeToTextArea("Sorry, I didn't understand your entry. You did not pick anything up from " + location);
-                } else if (response.equalsIgnoreCase("Y")) {
-                    addItemAndUpdateJson(furniture_items, furniture, noun);
-                    success = true;
-                } else if (response.equalsIgnoreCase("N")) {
-                    gHandler.mainFrame.writeToTextArea("You did not pick anything from " + location);
-                } else {
-                    gHandler.mainFrame.writeToTextArea("Sorry, I didn't understand your entry. You did not pick anything up from " + location);
-                }
-            }
-            //if furniture has no item available to be picked up
-            if (furniture_items.isEmpty()) {
-                gHandler.mainFrame.writeToTextArea("There's nothing here...");
-            }
-        } else {
-            gHandler.mainFrame.writeToTextArea("There's nothing here");
-        }
-        return success;
-    }
-
-    private static void addItemAndUpdateJson(ArrayList<String> furniture_items, Map<String, Object> furniture, String noun) {
+    private static void addItemAndUpdateJson(String noun) {
+        Map<String, Object> furniture = map.get(location);
+        ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         inventory.add(noun);
         furniture_items.remove(noun);
         furniture.put("furniture_items", furniture_items);
@@ -244,7 +216,7 @@ class ActionController implements ActionListener {
         FileManager.writeJSON(map, furniturePuzzlesJsonPath);
         gHandler.mainFrame.writeToTextArea(noun + " has been added to your inventory");
         Sounds.playSounds("pick.wav", 1000);
-        hideItemOnNavScreen(noun);
+        hideItemOnNavScreen(noun, getLocationBoolArr(location));
     }
 
     // quit game
@@ -263,40 +235,18 @@ class ActionController implements ActionListener {
         if (inventory.contains(item.toLowerCase())) {
             if (inventory.contains(item.toLowerCase())) {
                 inventory.remove(item);
-                Sounds.playSounds("drop.wav", 1000);
+                Sounds.changeSoundVolume("drop.wav", 0, -20);
                 furniture_items.add(item);
                 furniture.put("furniture_items", furniture_items);
                 map.put(location, furniture);
                 FileManager.writeJSON(map, furniturePuzzlesJsonPath);
                 gHandler.mainFrame.writeToTextArea(item + " has been dropped from your inventory.");
-                unhideItemOnNavScreen(noun);
+                unhideItemOnNavScreen(noun, getLocationBoolArr(location));
             } else {
                 gHandler.mainFrame.writeToTextArea("Sorry, the item you entered is not in your inventory.");
             }
         }
     }
-
-    private static void solvePuzzle(String loc) {
-        Map<String, Object> furniture = map.get(loc);
-        location = loc;
-        String puzzle_exist = (String) furniture.get("puzzle_exist");
-        String puzzle_type = (String) furniture.get("puzzle_type");
-        // check if a location has puzzle
-        if (puzzle_exist.equals("Y")) {
-            switch (puzzle_type) {
-                case "riddles":
-                    riddles(location);
-                    break;
-                case "use tool":
-                    toolPuzzle(location);
-                    break;
-                case "final":
-                    doorPuzzle(location);
-                    break;
-            }
-        }
-    }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -310,7 +260,7 @@ class ActionController implements ActionListener {
         System.out.println("printing out the verb " + verb);
         noun = TextParser.getNoun(actionClicked);
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
-            playerInputLogic(verb, noun);
+        playerInputLogic(verb, noun);
     }
 
     public static void playerInputLogic(String verb, String noun) {
@@ -323,52 +273,34 @@ class ActionController implements ActionListener {
                 break;
             case "go":
                 // Currently, this is only pointing to the first index of the parsed array
-                move(noun);
+                moveDirection(noun);
                 break;
             case "get":
                 get(noun);
                 break;
             case "inspect":
-                inspect(noun);
+                inspectItem(noun);
                 break;
             case "help":
                 helpMenu();
                 break;
             case "drop":
-                drop(noun);
+                dropItem(noun);
                 break;
             case "final":
                 System.out.println("clicked on door");
-                doorPuzzle("door");
+                doorPuzzle();
+                break;
+            case "tool":
+                toolPuzzle(location);
+                break;
+            case "riddles":
+                riddles(location);
                 break;
             default:
                 System.out.println("Sorry, I don't understand your input, please enter again. ");
                 FileManager.getResource("commands.txt");
         }
-    }
-
-    public static void drop(String noun) {
-        if (noun != null) {
-            if (inventory.isEmpty()) {
-                System.out.println("You have nothing to drop");
-            } else
-                dropItem(noun);
-        } else {
-            System.out.println("Sorry, I don't understand your input, please enter again. ");
-            FileManager.getResource("commands.txt");
-        }
-    }
-
-    public static boolean inspect(String noun) {
-        boolean success = false;
-        if (noun != null) {
-            inspectItem(noun);
-            success = true;
-        } else {
-            gHandler.mainFrame.writeToTextArea("Sorry, I don't understand your input, please enter again. ");
-            FileManager.getResource("commands.txt");
-        }
-        return success;
     }
 
     private static void get(String noun) {
@@ -378,56 +310,45 @@ class ActionController implements ActionListener {
 
         if (noun != null) {
             if (furniture_items.contains(noun)) {
-                System.out.println("You added " + noun + " to your inventory");
-                pickUpItem(noun);
+                gHandler.mainFrame.writeToTextArea("You added " + noun + " to your inventory");
+                addItemAndUpdateJson(noun);
             } else if (puzzle_reward_item.contains(noun)) {
                 inventory.add(noun);
             } else {
-                System.out.println("Sorry, I don't understand your input, please enter again. ");
+                gHandler.mainFrame.writeToTextArea("Sorry, I don't understand your input, please enter again. ");
                 FileManager.getResource("commands.txt");
             }
         } else {
-            System.out.println("Sorry, I don't understand your input, please enter again. ");
+            gHandler.mainFrame.writeToTextArea("Sorry, I don't understand your input, please enter again. ");
             FileManager.getResource("commands.txt");
         }
     }
 
-    public static void move(String direction) {
-        System.out.println("movement triggered by game button");
-        moveDirection(direction);
-    }
-
-
     private static void moveDirection(String direction) {
         Map<String, Object> furniture = map.get(location);
         location = (String) furniture.get(direction);
-        Map<String, Object> new_furniture = map.get(location);
-        String furniture_desc = (String) new_furniture.get("furniture_desc");
-        String furniture_picture = (String) new_furniture.get("furniture_picture");
-        FileManager.getResource(furniture_picture);
-        System.out.println("Now you are in front of " + location);
-        System.out.println(furniture_desc);
+        gHandler.mainFrame.writeToTextArea("Now you are in front of " + location);
         switch (location) {
             case "bed":
-                gHandler.mainFrame.bedScreen();
+                gHandler.mainFrame.gameScreen(bedArr, invArr);
                 break;
             case "door":
-                gHandler.mainFrame.doorScreen();
+                gHandler.mainFrame.gameScreen(doorArr, invArr);
                 break;
             case "window":
-                gHandler.mainFrame.windowScreen();
+                gHandler.mainFrame.gameScreen(windowArr, invArr);
                 break;
             case "drawer":
-                gHandler.mainFrame.deskScreen();
+                gHandler.mainFrame.gameScreen(deskArr, invArr);
                 break;
             case "safe":
-                gHandler.mainFrame.safeScreen();
+                gHandler.mainFrame.gameScreen(safeArr, invArr);
                 break;
             case "lamp":
-                gHandler.mainFrame.lampScreen();
+                gHandler.mainFrame.gameScreen(lampArr, invArr);
                 break;
             case "chair":
-                gHandler.mainFrame.chairScreen();
+                gHandler.mainFrame.gameScreen(chairArr, invArr);
                 break;
         }
     }
@@ -436,7 +357,6 @@ class ActionController implements ActionListener {
     private static void helpMenu() {
         FileManager.getResource("helperMenu.txt");
         System.out.println("\nTo select from the options above enter a number 1-4.");
-        //Scanner scan = new Scanner(System.in);
         int selection = scan.nextInt();
         switch (selection) {
             case 1:
@@ -462,59 +382,47 @@ class ActionController implements ActionListener {
         Map<String, Object> furniture = map.get(loc);
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
         String puzzle_desc = (String) furniture.get("puzzle_desc");
-        ArrayList<Object> puzzle_filename = (ArrayList<Object>) furniture.get("puzzle_filename");
-        ArrayList<String> converted_puzzle_filename = (ArrayList<String>) (ArrayList<?>) (puzzle_filename);
-        String puzzle_sounds = (String) furniture.get("puzzle_sounds");
-        ArrayList<Object> multiple_puzzle_answer = (ArrayList<Object>) furniture.get("multiple_puzzle_answer");
+        String riddle1 = "Double my number, I'm less than a score, Half of my number is less than four.\n" +
+                "Add one to my double when bakers are near, Days of the week are still greater,\n" +
+                "I fear. ";
+        String riddle2 = "If there are three apples and you take away two, how many apples do you have?";
+        String riddle3 = "If you buy a rooster for the purpose of laying eggs and you expect to get three eggs each\n" +
+                "day for breakfast, how many eggs will you have after three weeks?";
+        String ans1 = "6";
+        String ans2 = "2";
+        String ans3 = "0";
+        ArrayList<String> riddles = new ArrayList<>();
+        riddles.add(riddle1);
+        riddles.add(riddle2);
+        riddles.add(riddle3);
+        ArrayList<String> answers = new ArrayList<>();
+        answers.add(ans1);
+        answers.add(ans2);
+        answers.add(ans3);
 
-        if (!puzzleSolved()) {
+        if (!crowbarObtained) {
             System.out.println("A puzzle has been found in " + loc + ".");
             System.out.println(puzzle_desc);
-            System.out.println("Would you like to solve this puzzle now? Y/N");
-            ANSWER = scan.nextLine().strip().toLowerCase();
-            if (ANSWER.equals("y")) {
-                // riddles puzzle
-                boolean solved = false;
-                Random r = new Random();
-                int randomItem = r.nextInt(converted_puzzle_filename.size());
-                String randomPuzzle = converted_puzzle_filename.get(randomItem);
-                ArrayList<String> randomAnswer = (ArrayList<String>) multiple_puzzle_answer.get(randomItem);
-                FileManager.getResource(randomPuzzle);
-                System.out.println("\nYour answer:      (If it's too hard to answer, please enter [easy] to get a easier question.)");
-                while (!solved) {
-                    ANSWER = scan.nextLine().strip().toLowerCase();
-                    // if user input correct answer
-                    if (ANSWER.equals(furniture.get("easy_answer")) || randomAnswer.contains(ANSWER)) {
-                        System.out.println(furniture.get("puzzle_reward"));
-                        System.out.println("You found " + puzzle_reward_item.get(0) + ".");
-                        pickUpItem(puzzle_reward_item.get(0));
-                        solved = true;
-                    } else if (ANSWER.equalsIgnoreCase("easy")) {
-                        System.out.println(furniture.get("easy_question"));
-                    } else {
-                        System.out.println("you didn't solve the puzzle. Try again.");
-                    }
+            // riddles puzzle
+            Random r = new Random();
+            int randomItem = r.nextInt(3);
+            String randomPuzzle = riddles.get(randomItem);
+            gHandler.mainFrame.writeToTextArea(randomPuzzle);
+            gHandler.mainFrame.SUBMITbtn.addActionListener(e -> {
+                ANSWER = gHandler.mainFrame.inputText.getText();
+                // if user input correct answer
+                if (ANSWER.equals(answers.get(randomItem))) {
+                    gHandler.mainFrame.writeToTextArea("puzzle_reward");
+                    gHandler.mainFrame.writeToTextArea("You found " + puzzle_reward_item.get(0) + ".");
+                    addItemAndUpdateJson(puzzle_reward_item.get(0));
+                    crowbarObtained = true;
+                } else {
+                    gHandler.mainFrame.writeToTextArea("you didn't solve the puzzle. Try again.");
                 }
-            } else if (ANSWER.equals("n")) {
-                System.out.println("You decided not to solve the puzzle");
-            } else {
-                System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
-            }
+            });
+        } else {
+            gHandler.mainFrame.writeToTextArea("The safe is already open! Shouldn't you be escaping?");
         }
-    }
-
-    public static boolean puzzleSolved() {
-        //checks to see if the player has solved any of the puzzles, if they have, returns true to the caller!
-        Map<String, Object> furniture = map.get(location);
-        ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
-        Boolean solved = false;
-        if (((inventory.contains("key") && location.equals("safe")) ||
-                (inventory.contains("a piece of paper with number 104") && location.equals("window")) ||
-                (inventory.contains("a piece of paper with number 104") && location.equals("safe")))) {
-            System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
-            solved = true;
-        }
-        return solved;
     }
 
     private static void toolPuzzle(String loc) {
@@ -522,112 +430,118 @@ class ActionController implements ActionListener {
         Map<String, Object> furniture = map.get(loc);
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
         String puzzle_desc = (String) furniture.get("puzzle_desc");
-        String puzzle_sounds = (String) furniture.get("puzzle_sounds");
         ArrayList<String> puzzle_itemsNeeded = (ArrayList<String>) furniture.get("puzzle_itemsNeeded");
-        String puzzle_verb = (String) furniture.get("puzzle_verb");
         String puzzle_reward = (String) furniture.get("puzzle_reward");
         //
         //
-        if (!puzzleSolved()) {
-            System.out.println("A puzzle has been found in " + loc + ".");
-            System.out.println(puzzle_desc);
-            System.out.println("Would you like to solve this puzzle now? Y/N");
-            String solve_ans = scan.nextLine();
-            if (solve_ans.equalsIgnoreCase("Y")) {
-                System.out.println("You need to use an item from your inventory. Let's see if you got needed item in your inventory...");
-                System.out.println("Your current inventory: " + inventory);
-                if (!inventory.contains(puzzle_itemsNeeded.get(0))) {
-                    System.out.println("Sorry, you don't have the tools. Explore the room and see if you can find anything");
-                } else if (inventory.contains(puzzle_itemsNeeded.get(0))) {
-                    System.out.println("Which of the item you'd like to use?");
-                    String ans = scan.nextLine();
-                    if ((ans.equalsIgnoreCase(puzzle_verb + " " + puzzle_itemsNeeded.get(0))) || ans.equalsIgnoreCase(puzzle_itemsNeeded.get(0))) {
-                        System.out.println(puzzle_reward + " and you've found " + puzzle_reward_item.get(0));
-                        inventory.remove(puzzle_itemsNeeded.get(0));
-                        inventory.add(puzzle_reward_item.get(0));
-                        System.out.println("Added " + puzzle_reward_item.get(0) + " to your inventory");
-                    } else if ((inventory.contains(ans) && (!ans.equals(puzzle_itemsNeeded)))) {
-                        System.out.println("Wrong item. The puzzle has not been solved. Please come back later.");
-                    } else {
-                        System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
-                    }
+        if (paperObtained) {
+            gHandler.mainFrame.writeToTextArea("The puzzle has been solved. You should focus on escaping!");
+        } else {
+            gHandler.mainFrame.writeToTextArea("A puzzle has been found in " + loc + "." + puzzle_desc + "You need to use an item from your inventory. Let's see if you got needed item in your inventory...\n Your current inventory: " + inventory);
+            if (!inventory.contains(puzzle_itemsNeeded.get(0))) {
+                gHandler.mainFrame.writeToTextArea("Sorry, you don't have the right tool. Explore the room and see if you can find anything");
+            } else if (inventory.contains(puzzle_itemsNeeded.get(0))) {
+                gHandler.mainFrame.writeToTextArea(puzzle_reward + " and you've found " + puzzle_reward_item.get(0));
+                inventory.remove(puzzle_itemsNeeded.get(0));
+                switch (puzzle_itemsNeeded.get(0)) {
+                    case "crowbar":
+                        gHandler.mainFrame.crowbar.setVisible(false);
+                        gHandler.mainFrame.crowbarLabel.setVisible(false);
+                        invArr.set(5, false);
+                        gHandler.mainFrame.windowWithKey.setVisible(false);
+                        gHandler.mainFrame.windowWithoutKey.setVisible(true);
+                        windowArr.set(6, false);
+                        windowArr.set(7, true);
+                        Sounds.changeSoundVolume("glass_Breaking.wav", 0, -20);
+                        keyObtained = true;
+                        break;
+                    case "key":
+                        gHandler.mainFrame.key.setVisible(false);
+                        gHandler.mainFrame.keyLabel.setVisible(false);
+                        invArr.set(0, false);
+                        paperObtained = true;
+                        break;
                 }
-            } else if (solve_ans.equalsIgnoreCase("N")) {
-                System.out.println("You chose not to solve the puzzle.");
-            } else {
-                System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
+                inventory.add(puzzle_reward_item.get(0));
+                addItemAndUpdateJson(puzzle_reward_item.get(0));
+                gHandler.mainFrame.writeToTextArea("Added " + puzzle_reward_item.get(0) + " to your inventory");
             }
         }
     }
 
-    private static void doorPuzzle(String loc) {
+
+    private static void doorPuzzle() {
         //Final puzzle in the game, can be solved at any time if you know the secret number (104)
-
-        System.out.println("door puzzle GUI 1");
-
-        Map<String, Object> furniture = map.get(loc);
-        String puzzle_desc = (String) furniture.get("puzzle_desc");
-        String puzzle_sounds = (String) furniture.get("puzzle_sounds");
+        Map<String, Object> furniture = map.get("door");
         String puzzle_answer = (String) furniture.get("puzzle_answer");
         String puzzle_reward = (String) furniture.get("puzzle_reward");
-        gHandler.mainFrame.writeToTextArea(puzzle_desc);
-        gHandler.mainFrame.writeToTextArea("What's the password? You have " + max_attempts +
-                " attempts remaining. If you'll like to try later, enter[later]");
-
-        ANSWER = gHandler.mainFrame.inputText.getText();
-
-
-        System.out.println("door puzzle GUI 2");
-
-//        JFrame frame = new JFrame("Door Puzzle");
-//        frame.setSize(200, 200);
-//        frame.setLocationRelativeTo(null);
-//        frame.setVisible(true);
-//        JOptionPane.showMessageDialog(frame, "What's the password? You have " + max_attempts + " attempts remaining. If you'll like to try later, enter[later]");
-//        int result = JOptionPane.showConfirmDialog(null, "Do wish to solve the puzzle ");
-//        while (0 <= max_attempts && max_attempts <= 3){
-//        switch (result) {
-//            case JOptionPane.YES_OPTION:
-//                String name = JOptionPane.showInputDialog(null,
-//                        "Please enter the passcode");
-//                int num = Integer.parseInt(name);
-//                if (num == 104) {
-//                    System.out.println("door puzzle 6");
-//                    Sounds.changeSoundVolume("open_door.wav", 0, num);
-//                    JOptionPane.showMessageDialog(frame, "Congratulations, you've exited the game");
-//                    frame.dispose();
-//                } else {
-//                    JOptionPane.showMessageDialog(frame, "You entered the wrong number");
-//                    max_attempts = max_attempts - 1;
-//                    JOptionPane.showMessageDialog(frame, "You have " + max_attempts + " left.");
-//                    frame.dispose();
-//                    break;
-//                }
-//                break;
-//            case JOptionPane.NO_OPTION:
-//            case JOptionPane.CANCEL_OPTION:
-//                frame.dispose();
-//                break;
-//        }
-
-        if (ANSWER.trim().equals("later") || ANSWER.trim().equals("")) {
-            System.out.println("door puzzle GUI 3");
-            gHandler.mainFrame.writeToTextArea("No worries! Try next time!");
-            System.out.println("door puzzle GUI 4");
+        if (doorInteractedBefore) {
+            response(2);
+        } else if (secondAttemptComplete) {
+            response(1);
         } else {
-            while (max_attempts-- > 0) {
+            response(3);
+        }
+        gHandler.mainFrame.SUBMITbtn.addActionListener(e ->
+
+        {
+            ANSWER = gHandler.mainFrame.inputText.getText();
+
+            if (ANSWER.trim().equals("later") || ANSWER.trim().equals("")) {
+                gHandler.mainFrame.writeToTextArea("No worries! Try next time!");
+            } else {
                 if (ANSWER.trim().equals(puzzle_answer)) {
-                    gHandler.mainFrame.writeToTextArea(puzzle_reward);
-                    gHandler.mainFrame.writeToTextArea("You won the game! Thanks for playing!");
+                    gHandler.mainFrame.writeToTextArea(puzzle_reward + "You won the game! Thanks for playing!");
                     System.out.println("game won");
-                    gHandler.mainFrame.endScreen("end_game");
-                } else if (max_attempts == 0) {
+                    gHandler.mainFrame.winScreen("end_game");
+                } else if (secondAttemptComplete) {
                     gHandler.mainFrame.writeToTextArea("You lost the game! You are Trapped. Please try again later.");
-                    gHandler.mainFrame.endScreen("end_game");
+                    gHandler.mainFrame.loseScreen("exploded");
+                } else if (firstAttemptComplete) {
+                    response(1);
+                    secondAttemptComplete = true;
                 } else {
-                    gHandler.mainFrame.writeToTextArea("Wrong password. Try again next time! " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining");
+                    response(2);
+                    firstAttemptComplete = true;
+                    doorInteractedBefore = true;
                 }
             }
+        });
+
+    }
+
+    private static void response(Integer num) {
+        gHandler.mainFrame.writeToTextArea("Please enter the 3-digit passcode." + "You have " + num +
+                " attempts remaining. If you'll like to try later, enter 'later' in the test box below");
+    }
+
+    private static List<Boolean> getLocationBoolArr(String location) {
+        List<Boolean> boolLi;
+        switch (location) {
+            case "bed":
+                boolLi = bedArr;
+                break;
+            case "door":
+                boolLi = doorArr;
+                break;
+            case "window":
+                boolLi = windowArr;
+                break;
+            case "drawer":
+                boolLi = deskArr;
+                break;
+            case "safe":
+                boolLi = safeArr;
+                break;
+            case "lamp":
+                boolLi = lampArr;
+                break;
+            case "chair":
+                boolLi = chairArr;
+                break;
+            default:
+                boolLi = null;
         }
+        return boolLi;
     }
 }

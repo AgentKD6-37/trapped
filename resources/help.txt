@@ -1,0 +1,4 @@
+To move, click the person moving to the left or right
+To interact with an object, right click it and pick an option!
+You can interact with items in your inventory too!
+Don't forget, 8 minutes until boom...

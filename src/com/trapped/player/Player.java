@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.util.*;
 
 
-import static com.trapped.utilities.TextColor.*;
 
 
 public class Player implements Serializable {
@@ -47,8 +46,8 @@ public class Player implements Serializable {
 
     // After the intro story, player will see current location and the view of the whole room.
     public static void viewRoom() {
-        System.out.println("\nYou are currently in front of " + TextColor.RED + location + TextColor.RESET);
-        System.out.println(TextColor.GREEN + "\nWhat you'd like to do next? (type [commands] to check available commands and [help] to see other help items)" + TextColor.RESET);
+        System.out.println("\nYou are currently in front of " +  location );
+        System.out.println("\nWhat you'd like to do next? (type [commands] to check available commands and [help] to see other help items)");
         playerInput();
     }
 
@@ -108,7 +107,7 @@ public class Player implements Serializable {
         ArrayList<String> tempArr = new ArrayList<>();
 
         FileManager.getResource(furniture_picture);
-        System.out.println("Inspecting...\nYou found: " + TextColor.RED + furniture_items + TextColor.RESET);
+        System.out.println("Inspecting...\nYou found: " + furniture_items);
         furniture_items.removeAll(tempArr);
         furniture.put("furniture_items", furniture_items);
         map.put("location", furniture);
@@ -540,7 +539,7 @@ public class Player implements Serializable {
         String puzzle_answer = (String) furniture.get("puzzle_answer");
         String puzzle_reward = (String) furniture.get("puzzle_reward");
         System.out.println(puzzle_desc);
-        System.out.println("What's the password? You have " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining. If you's like to try later, enter[later]");
+        System.out.println("What's the password? You have "  + max_attempts + " attempts remaining. If you's like to try later, enter[later]");
         ANSWER = scan.nextLine();
 
         if (ANSWER.trim().equals("later") || ANSWER.trim().equals("")) {
@@ -556,7 +555,7 @@ public class Player implements Serializable {
                     System.out.println("You lost the game! You are Trapped. Please try again later.");
                     System.exit(0);
                 } else {
-                    System.out.println("Wrong password. Try again next time! " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining");
+                    System.out.println("Wrong password. Try again next time! " + max_attempts + " attempts remaining");
                 }
             }
         }

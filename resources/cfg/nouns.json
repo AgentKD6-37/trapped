@@ -52,8 +52,8 @@
   "matches": [
     "lighter",
     "match",
-    "fire"
-
+    "fire",
+    "matchbox"
   ],
   "safe": [
     "wall safe"
@@ -99,5 +99,9 @@
   ],
   "right": [
 
-  ]
+  ],
+  "wallet": [
+    "wallet"
+  ],
+  "matchbox": ["matchbox"]
 }

@@ -22,18 +22,20 @@ class ActionController implements ActionListener {
         this.gHandler = gHandler;
     }
 
-    static List<Boolean> bedArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false,false,true,false);
-    static List<Boolean> doorArr = Arrays.asList(false, true, false, false, false, false, false, false, false, false, false, false, false, false,true,false,false);
-    static List<Boolean> safeArr = Arrays.asList(false, false, true, false, false, false, false, false, false, false, false, false, false, false,true,false,false);
-    static List<Boolean> deskArr = Arrays.asList(false, false, false, true, false, false, false, false, false, false, false, false, false, false,false,false,true);
-    static List<Boolean> lampArr = Arrays.asList(false, false, false, false, true, false, false, false, false, false, false, false, false, false,true,false,false);
-    static List<Boolean> chairArr = Arrays.asList(false, false, false, false, false, true, false, false, false, false, false, false, false, false,false,false,true);
-    static List<Boolean> windowArr = Arrays.asList(false, false, false, false, false, false, true, false, false, false, false, false, false, false,true,false,false);
-    static List<Boolean> invArr = Arrays.asList(false,false,false,false,false,false);
+    static List<Boolean> bedArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false);
+    static List<Boolean> doorArr = Arrays.asList(false, true, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false);
+    static List<Boolean> safeArr = Arrays.asList(false, false, true, false, false, false, false, false, false, false, false, false, false, false, true, false, false);
+    static List<Boolean> deskArr = Arrays.asList(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, true);
+    static List<Boolean> lampArr = Arrays.asList(false, false, false, false, true, false, false, false, false, false, false, false, false, false, true, false, false);
+    static List<Boolean> chairArr = Arrays.asList(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, true);
+    static List<Boolean> windowArr = Arrays.asList(false, false, false, false, false, false, true, false, false, false, false, false, false, false, true, false, false);
+    static List<Boolean> invArr = Arrays.asList(false, false, false, false, false, false);
     static Boolean crowbarObtained = false;
+    static Boolean paperObtained = false;
+    static Boolean keyObtained = false;
     static boolean firstAttemptComplete = false;
     static boolean secondAttemptComplete = false;
-    static boolean thirdAttemptComplete = false;
+    static boolean doorInteractedBefore = false;
 
 
     public static String verb;
@@ -94,7 +96,7 @@ class ActionController implements ActionListener {
         Map<String, Object> furniture = map.get(something);
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         String furniture_desc = (String) furniture.get("furniture_desc");
-        if (location.equals("window") && puzzleSolved()) {
+        if (location.equals("window") && keyObtained) {
             gHandler.mainFrame.writeToTextArea("Someone broke this window!..." + "\nYou see: " + furniture_items + ".");
         } else {
             gHandler.mainFrame.writeToTextArea(furniture_desc + "\nYou see: " + furniture_items + ".");
@@ -110,37 +112,37 @@ class ActionController implements ActionListener {
                 gHandler.mainFrame.key.setVisible(true);
                 gHandler.mainFrame.keyLabel.setVisible(false);
                 arr.set(8, true);
-                invArr.set(0,false);
+                invArr.set(0, false);
                 break;
             case "wallet":
                 gHandler.mainFrame.wallet.setVisible(true);
                 gHandler.mainFrame.walletLabel.setVisible(false);
                 arr.set(9, true);
-                invArr.set(1,false);
+                invArr.set(1, false);
                 break;
             case "crowbar":
                 gHandler.mainFrame.crowbar.setVisible(true);
                 gHandler.mainFrame.crowbarLabel.setVisible(false);
                 arr.set(13, true);
-                invArr.set(5,false);
+                invArr.set(5, false);
                 break;
             case "paper":
                 gHandler.mainFrame.paper.setVisible(true);
                 gHandler.mainFrame.paperLabel.setVisible(false);
                 arr.set(10, true);
-                invArr.set(2,false);
+                invArr.set(2, false);
                 break;
             case "candle":
                 gHandler.mainFrame.candle.setVisible(true);
                 gHandler.mainFrame.candleLabel.setVisible(false);
                 arr.set(12, true);
-                invArr.set(4,false);
+                invArr.set(4, false);
                 break;
             case "matchbox":
                 gHandler.mainFrame.matches.setVisible(true);
                 gHandler.mainFrame.matchLabel.setVisible(false);
                 arr.set(11, true);
-                invArr.set(3,false);
+                invArr.set(3, false);
                 break;
         }
     }
@@ -151,37 +153,37 @@ class ActionController implements ActionListener {
                 gHandler.mainFrame.key.setVisible(false);
                 gHandler.mainFrame.keyLabel.setVisible(true);
                 arr.set(8, false);
-                invArr.set(0,true);
+                invArr.set(0, true);
                 break;
             case "wallet":
                 gHandler.mainFrame.wallet.setVisible(false);
                 gHandler.mainFrame.walletLabel.setVisible(true);
                 arr.set(9, false);
-                invArr.set(1,true);
+                invArr.set(1, true);
                 break;
             case "crowbar":
                 gHandler.mainFrame.crowbar.setVisible(false);
                 gHandler.mainFrame.crowbarLabel.setVisible(true);
                 arr.set(13, false);
-                invArr.set(5,true);
+                invArr.set(5, true);
                 break;
             case "paper":
                 gHandler.mainFrame.paper.setVisible(false);
                 gHandler.mainFrame.paperLabel.setVisible(true);
                 arr.set(10, false);
-                invArr.set(2,true);
+                invArr.set(2, true);
                 break;
             case "candle":
                 gHandler.mainFrame.candle.setVisible(false);
                 gHandler.mainFrame.candleLabel.setVisible(true);
                 arr.set(12, false);
-                invArr.set(4,true);
+                invArr.set(4, true);
                 break;
             case "matchbox":
                 gHandler.mainFrame.matches.setVisible(false);
                 gHandler.mainFrame.matchLabel.setVisible(true);
                 arr.set(11, false);
-                invArr.set(3,true);
+                invArr.set(3, true);
                 break;
         }
     }
@@ -189,10 +191,11 @@ class ActionController implements ActionListener {
 
     private static void noItemsInRoom(String something) {
         Map<String, Object> furniture = map.get(something);
-        if (location.equals("window") && puzzleSolved()) {
+        if (location.equals("window") && keyObtained) {
             gHandler.mainFrame.writeToTextArea("Someone broke this window!..." + "\nNo items found here.");
         } else {
             String furniture_desc = (String) furniture.get("furniture_desc");
+            System.out.println("key obtained is: " + keyObtained);
             gHandler.mainFrame.writeToTextArea(furniture_desc + "\nNo items found here.");
         }
     }
@@ -232,7 +235,7 @@ class ActionController implements ActionListener {
         if (inventory.contains(item.toLowerCase())) {
             if (inventory.contains(item.toLowerCase())) {
                 inventory.remove(item);
-                Sounds.changeSoundVolume("drop.wav",0,-20);
+                Sounds.changeSoundVolume("drop.wav", 0, -20);
                 furniture_items.add(item);
                 furniture.put("furniture_items", furniture_items);
                 map.put(location, furniture);
@@ -327,25 +330,25 @@ class ActionController implements ActionListener {
         gHandler.mainFrame.writeToTextArea("Now you are in front of " + location);
         switch (location) {
             case "bed":
-                gHandler.mainFrame.gameScreen(bedArr,invArr);
+                gHandler.mainFrame.gameScreen(bedArr, invArr);
                 break;
             case "door":
-                gHandler.mainFrame.gameScreen(doorArr,invArr);
+                gHandler.mainFrame.gameScreen(doorArr, invArr);
                 break;
             case "window":
-                gHandler.mainFrame.gameScreen(windowArr,invArr);
+                gHandler.mainFrame.gameScreen(windowArr, invArr);
                 break;
             case "drawer":
-                gHandler.mainFrame.gameScreen(deskArr,invArr);
+                gHandler.mainFrame.gameScreen(deskArr, invArr);
                 break;
             case "safe":
-                gHandler.mainFrame.gameScreen(safeArr,invArr);
+                gHandler.mainFrame.gameScreen(safeArr, invArr);
                 break;
             case "lamp":
-                gHandler.mainFrame.gameScreen(lampArr,invArr);
+                gHandler.mainFrame.gameScreen(lampArr, invArr);
                 break;
             case "chair":
-                gHandler.mainFrame.gameScreen(chairArr,invArr);
+                gHandler.mainFrame.gameScreen(chairArr, invArr);
                 break;
         }
     }
@@ -397,7 +400,7 @@ class ActionController implements ActionListener {
         answers.add(ans2);
         answers.add(ans3);
 
-        if (!puzzleSolved()) {
+        if (!crowbarObtained) {
             System.out.println("A puzzle has been found in " + loc + ".");
             System.out.println(puzzle_desc);
             // riddles puzzle
@@ -412,23 +415,14 @@ class ActionController implements ActionListener {
                     gHandler.mainFrame.writeToTextArea("puzzle_reward");
                     gHandler.mainFrame.writeToTextArea("You found " + puzzle_reward_item.get(0) + ".");
                     addItemAndUpdateJson(puzzle_reward_item.get(0));
+                    crowbarObtained = true;
                 } else {
                     gHandler.mainFrame.writeToTextArea("you didn't solve the puzzle. Try again.");
                 }
             });
+        } else {
+            gHandler.mainFrame.writeToTextArea("The safe is already open! Shouldn't you be escaping?");
         }
-    }
-
-
-    public static boolean puzzleSolved() {
-        //checks to see if the player has solved any of the puzzles, if they have, returns true to the caller!
-        Boolean solved = false;
-        if (((inventory.contains("key") && location.equals("window")) ||
-                (inventory.contains("paper") && location.equals("desk")))||crowbarObtained) {
-            gHandler.mainFrame.writeToTextArea("The puzzle has been solved. You should focus on escaping!");
-            solved = true;
-        }
-        return solved;
     }
 
     private static void toolPuzzle(String loc) {
@@ -440,7 +434,9 @@ class ActionController implements ActionListener {
         String puzzle_reward = (String) furniture.get("puzzle_reward");
         //
         //
-        if (!puzzleSolved()) {
+        if (paperObtained) {
+            gHandler.mainFrame.writeToTextArea("The puzzle has been solved. You should focus on escaping!");
+        } else {
             gHandler.mainFrame.writeToTextArea("A puzzle has been found in " + loc + "." + puzzle_desc + "You need to use an item from your inventory. Let's see if you got needed item in your inventory...\n Your current inventory: " + inventory);
             if (!inventory.contains(puzzle_itemsNeeded.get(0))) {
                 gHandler.mainFrame.writeToTextArea("Sorry, you don't have the right tool. Explore the room and see if you can find anything");
@@ -451,26 +447,25 @@ class ActionController implements ActionListener {
                     case "crowbar":
                         gHandler.mainFrame.crowbar.setVisible(false);
                         gHandler.mainFrame.crowbarLabel.setVisible(false);
-                        invArr.set(5,false);
+                        invArr.set(5, false);
                         gHandler.mainFrame.windowWithKey.setVisible(false);
                         gHandler.mainFrame.windowWithoutKey.setVisible(true);
                         windowArr.set(6, false);
                         windowArr.set(7, true);
-                        Sounds.changeSoundVolume("glass_Breaking.wav",0,-20);
-                        crowbarObtained = true;
+                        Sounds.changeSoundVolume("glass_Breaking.wav", 0, -20);
+                        keyObtained = true;
                         break;
                     case "key":
                         gHandler.mainFrame.key.setVisible(false);
                         gHandler.mainFrame.keyLabel.setVisible(false);
-                        invArr.set(0,false);
+                        invArr.set(0, false);
+                        paperObtained = true;
                         break;
                 }
                 inventory.add(puzzle_reward_item.get(0));
                 addItemAndUpdateJson(puzzle_reward_item.get(0));
                 gHandler.mainFrame.writeToTextArea("Added " + puzzle_reward_item.get(0) + " to your inventory");
             }
-        } else {
-            gHandler.mainFrame.writeToTextArea("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
         }
     }
 
@@ -480,8 +475,16 @@ class ActionController implements ActionListener {
         Map<String, Object> furniture = map.get("door");
         String puzzle_answer = (String) furniture.get("puzzle_answer");
         String puzzle_reward = (String) furniture.get("puzzle_reward");
-        response(3);
-        gHandler.mainFrame.SUBMITbtn.addActionListener(e -> {
+        if (doorInteractedBefore) {
+            response(2);
+        } else if (secondAttemptComplete) {
+            response(1);
+        } else {
+            response(3);
+        }
+        gHandler.mainFrame.SUBMITbtn.addActionListener(e ->
+
+        {
             ANSWER = gHandler.mainFrame.inputText.getText();
 
             if (ANSWER.trim().equals("later") || ANSWER.trim().equals("")) {
@@ -494,18 +497,20 @@ class ActionController implements ActionListener {
                 } else if (secondAttemptComplete) {
                     gHandler.mainFrame.writeToTextArea("You lost the game! You are Trapped. Please try again later.");
                     gHandler.mainFrame.loseScreen("exploded");
-                } else if (firstAttemptComplete){
+                } else if (firstAttemptComplete) {
                     response(1);
                     secondAttemptComplete = true;
                 } else {
                     response(2);
                     firstAttemptComplete = true;
+                    doorInteractedBefore = true;
                 }
             }
         });
+
     }
 
-    private static void response(Integer num){
+    private static void response(Integer num) {
         gHandler.mainFrame.writeToTextArea("Please enter the 3-digit passcode." + "You have " + num +
                 " attempts remaining. If you'll like to try later, enter 'later' in the test box below");
     }

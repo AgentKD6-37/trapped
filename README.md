@@ -15,9 +15,13 @@ The game takes place in a mysterious room. The player has to explore the room, l
 Version 2.1
 What's new:
 > Full release complete!
+> 
 > Win or lose by guessing random door codes
+> 
 > Wait 8 minutes and explode!
+> 
 > Listen to creepy noises!
+> 
 > Break windows with correctly sized crowbars!
 
 ## Contributors

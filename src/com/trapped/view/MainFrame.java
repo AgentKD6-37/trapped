@@ -1,7 +1,6 @@
 package com.trapped.view;
 
 import com.trapped.Main;
-import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
 
 import javax.swing.*;
@@ -22,7 +21,7 @@ public class MainFrame extends JFrame {
 
     Main gHandler;
 
-    public JButton startButton, settingButton, exitButton,SUBMITbtn, HELPbtn;
+    public JButton startButton, SOUNDbtn, exitButton, SUBMITbtn, HELPbtn;
     public JPanel MenuBG_panel, menuPanel, itemsPanel, MainBG_Panel;
     public JLabel themeLabel, roomLabel, keyLabel, matchLabel, walletLabel, candleLabel, paperLabel, crowbarLabel;
 
@@ -32,8 +31,8 @@ public class MainFrame extends JFrame {
     public TextField inputText = new TextField(20);
     public static float VOLUME;
 
-    static List<Boolean> initArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false,false,true,false);
-    static List<Boolean> invArr = Arrays.asList(false,false,false,false,false,false);
+    static List<Boolean> initArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false);
+    static List<Boolean> invArr = Arrays.asList(false, false, false, false, false, false);
     Container con = getContentPane();
 
 
@@ -42,7 +41,7 @@ public class MainFrame extends JFrame {
         setUpMainMenu();
         showMainMenu();
         this.gHandler = gHandler;
-        Sounds.changeSoundVolumeLoop("creepy_noise_3.wav", 0,-20);
+        Sounds.changeSoundVolumeLoop("creepy_noise_3.wav", 0, -20);
     }
 
     public void setUpMainMenu() {
@@ -61,7 +60,6 @@ public class MainFrame extends JFrame {
         MainBG_Panel.add(roomLabel);
 
         menuPanel.add(startButton);
-        menuPanel.add(settingButton);
         menuPanel.add(exitButton);
 
         con.add(menuPanel);
@@ -71,6 +69,7 @@ public class MainFrame extends JFrame {
         con.add(inputText);
         con.add(SUBMITbtn);
         con.add(HELPbtn);
+        con.add(SOUNDbtn);
         con.add(itemsPanel);
         con.add(introText);
         setVisible(true);
@@ -78,14 +77,15 @@ public class MainFrame extends JFrame {
 
     public void settingScreen() {
 //        menuPanel.setVisible(true);
-        startButton.addActionListener(e -> gameScreen(initArr,invArr));
+        startButton.addActionListener(e -> gameScreen(initArr, invArr));
         exitButton.addActionListener(e -> System.exit(0));
         MainBG_Panel.updateUI();  // reset the panels
         MainBG_Panel.removeAll(); // remove all the layers
 //        menuPanel.setVisible(true);
         changeVolume();
         introText.setVisible(false);
-        startButton.addActionListener(e -> {introScreen("introstory");
+        startButton.addActionListener(e -> {
+            introScreen("introstory");
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
@@ -142,24 +142,26 @@ public class MainFrame extends JFrame {
         menuPanel = createJPanel(150, 350, 100, 140, false);
         menuPanel.setOpaque(false);
         MainBG_Panel = createJPanel(12, 40, 460, 500, false);
-        itemsPanel = createJPanel(320,550,155,155, false);
+        itemsPanel = createJPanel(320, 550, 155, 155, false);
         itemsPanel.setBackground(Color.black);
         itemsPanel.setLayout(new GridLayout(3, 2));
     }
 
     private void setAllButtons() {
-        startButton = createJButton("Start", 100, 40, false, Color.lightGray, Color.decode("#302a1e"));
-        settingButton = createJButton("Setting", 100, 40, false, Color.lightGray, Color.decode("#302a1e"));
+        startButton = createJButton("Enter", 100, 40, false, Color.lightGray, Color.decode("#302a1e"));
         exitButton = createJButton("Exit", 100, 40, false, Color.lightGray, Color.black);
-        SUBMITbtn = createJButton("Submit",80,40,false,Color.red,Color.BLACK);
-        SUBMITbtn.setBounds(220,660,80,40);
-        HELPbtn=createJButton("Help",60,40,false,Color.red,Color.black);
-        HELPbtn.setBounds(392,2,80,40);
 
-        SUBMITbtn.setOpaque(false);
+        SOUNDbtn = createJButton("Sounds", 50, 20, false, Color.red, Color.black);
+        SOUNDbtn.setBounds(12, 2, 80, 40);
+        HELPbtn = createJButton("Help", 50, 20, false, Color.red, Color.black);
+        HELPbtn.setBounds(392, 2, 80, 40);
+        SUBMITbtn = createJButton("Submit", 80, 40, false, Color.red, Color.BLACK);
+        SUBMITbtn.setBounds(220, 660, 80, 40);
+
+
         HELPbtn.setOpaque(false);
         startButton.setOpaque(false);
-        settingButton.setOpaque(false);
+        SOUNDbtn.setOpaque(false);
         exitButton.setOpaque(false);
     }
 
@@ -176,7 +178,9 @@ public class MainFrame extends JFrame {
 
         SUBMITbtn.setVisible(false);
         HELPbtn.setVisible(false);
-        startButton.addActionListener(e -> {introScreen("introstory");
+        SOUNDbtn.setVisible(false);
+        startButton.addActionListener(e -> {
+            introScreen("introstory");
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
@@ -185,9 +189,9 @@ public class MainFrame extends JFrame {
                 }
             };
             timer.schedule(task, 480000);
-    });
+        });
         exitButton.addActionListener(e -> System.exit(0));
-        settingButton.addActionListener(e -> settingScreen());
+        SOUNDbtn.addActionListener(e -> settingScreen());
     }
 
     public void winScreen(String fileName) {
@@ -203,6 +207,7 @@ public class MainFrame extends JFrame {
         inputText.setVisible(false);
         SUBMITbtn.setVisible(false);
         HELPbtn.setVisible(false);
+        SOUNDbtn.setVisible(false);
         introText.setVisible(true);
         writeToIntro(readFileFromResources(fileName));
         introText.addKeyListener(new KeyListener() {
@@ -241,6 +246,7 @@ public class MainFrame extends JFrame {
         inputText.setVisible(false);
         SUBMITbtn.setVisible(false);
         HELPbtn.setVisible(false);
+        SOUNDbtn.setVisible(false);
 
         introText.setVisible(true);
         writeToIntro(readFileFromResources(fileName));
@@ -280,6 +286,7 @@ public class MainFrame extends JFrame {
         inputText.setVisible(false);
         SUBMITbtn.setVisible(false);
         HELPbtn.setVisible(false);
+        SOUNDbtn.setVisible(false);
 
         introText.setVisible(true);
         writeToIntro(readFileFromResources(fileName));
@@ -318,6 +325,7 @@ public class MainFrame extends JFrame {
         inputText.setVisible(false);
         SUBMITbtn.setVisible(false);
         HELPbtn.setVisible(false);
+        SOUNDbtn.setVisible(false);
 
         introText.setVisible(true);
         writeToIntro(readFileFromResources(fileName));
@@ -330,7 +338,7 @@ public class MainFrame extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == 10) {
-                    gameScreen(initArr,invArr);
+                    gameScreen(initArr, invArr);
                 } else if (e.getKeyChar() == 27)
                     System.exit(0);
             }
@@ -375,7 +383,9 @@ public class MainFrame extends JFrame {
         inputText.setVisible(true);
         SUBMITbtn.setVisible(true);
         HELPbtn.setVisible(true);
+        SOUNDbtn.setVisible(true);
 
+//        SOUNDbtn.addActionListener();
         HELPbtn.addActionListener(e -> writeToTextArea(readFileFromResources("help")));
 
         JLabel lamp = createGameObj(130, 190, 190, 190, "Inspect", "inspect lamp", "resources/SwingArt/lamp1.png");
@@ -394,13 +404,13 @@ public class MainFrame extends JFrame {
         key = createGameObj(50, 400, 30, 30, "Inspect", "Get", "inspect key", "get key", "resources/SwingArt/key_world_item.png");
         JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
         JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
-        keyLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect key","drop key","resources/SwingArt/key.png");
-        matchLabel=createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect matchbox","drop matchbox","resources/SwingArt/matchbox.png");
-        walletLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect wallet","drop wallet","resources/SwingArt/wallet.png");
-        crowbarLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect crowbar","drop crowbar","resources/SwingArt/crowbar.png");
-        paperLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect paper","drop paper","resources/SwingArt/folded-paper.png");
-        candleLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect candle","drop candle","resources/SwingArt/candle-holder.png");
-        JLabel  cornerRight = createJLabel("resources/SwingArt/rightcorner.png");
+        keyLabel = createGameObj(350, 550, 50, 50, "Inspect", "Drop", "inspect key", "drop key", "resources/SwingArt/key.png");
+        matchLabel = createGameObj(350, 550, 50, 50, "Inspect", "Drop", "inspect matchbox", "drop matchbox", "resources/SwingArt/matchbox.png");
+        walletLabel = createGameObj(350, 550, 50, 50, "Inspect", "Drop", "inspect wallet", "drop wallet", "resources/SwingArt/wallet.png");
+        crowbarLabel = createGameObj(350, 550, 50, 50, "Inspect", "Drop", "inspect crowbar", "drop crowbar", "resources/SwingArt/crowbar.png");
+        paperLabel = createGameObj(350, 550, 50, 50, "Inspect", "Drop", "inspect paper", "drop paper", "resources/SwingArt/folded-paper.png");
+        candleLabel = createGameObj(350, 550, 50, 50, "Inspect", "Drop", "inspect candle", "drop candle", "resources/SwingArt/candle-holder.png");
+        JLabel cornerRight = createJLabel("resources/SwingArt/rightcorner.png");
         cornerRight.setBounds(380, 5, 90, 500);
         JLabel cornerLeft = createJLabel("resources/SwingArt/leftcorner.png");
         cornerLeft.setBounds(0, 5, 90, 500);
@@ -445,21 +455,20 @@ public class MainFrame extends JFrame {
 
 
         // showing the corner of the room when turning around in the room
-        if(arr.get(14)){
+        if (arr.get(14)) {
             cornerLeft.setVisible(false);
             cornerRight.setVisible(false);
             System.out.println("center triggered");
-        }else if (arr.get(15)) {
+        } else if (arr.get(15)) {
             cornerLeft.setVisible(true);
             cornerRight.setVisible(false);
             System.out.println("corner left triggered");
-        }
-        else if (arr.get(16)){
+        } else if (arr.get(16)) {
 
             cornerLeft.setVisible(false);
             cornerRight.setVisible(true);
             System.out.println("corner right triggered");
-        }else{
+        } else {
             System.out.println("nothing was triggered");
         }
 

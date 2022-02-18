@@ -60,14 +60,13 @@ public class MainFrame extends JFrame {
         roomLabel = createJLabel("resources/SwingArt/room1.png");
         MainBG_Panel.add(roomLabel);
 
-
         menuPanel.add(startButton);
         menuPanel.add(settingButton);
         menuPanel.add(exitButton);
 
+        con.add(menuPanel);
         con.add(MenuBG_panel);
         con.add(MainBG_Panel);
-        con.add(menuPanel);
         con.add(textArea);
         con.add(inputText);
         con.add(SUBMITbtn);
@@ -140,8 +139,8 @@ public class MainFrame extends JFrame {
 
     private void setAllPanels() {
         MenuBG_panel = createJPanel(-10, 0, 500, 750, false);
-        menuPanel = createJPanel(150, 350, 100, 180, false);
-        menuPanel.setBackground(Color.decode("#302a1e"));
+        menuPanel = createJPanel(150, 350, 100, 140, false);
+        menuPanel.setOpaque(false);
         MainBG_Panel = createJPanel(12, 40, 460, 500, false);
         itemsPanel = createJPanel(320,550,155,155, false);
         itemsPanel.setBackground(Color.black);
@@ -156,6 +155,12 @@ public class MainFrame extends JFrame {
         SUBMITbtn.setBounds(220,660,80,40);
         HELPbtn=createJButton("Help",60,40,false,Color.red,Color.black);
         HELPbtn.setBounds(392,2,80,40);
+
+        SUBMITbtn.setOpaque(false);
+        HELPbtn.setOpaque(false);
+        startButton.setOpaque(false);
+        settingButton.setOpaque(false);
+        exitButton.setOpaque(false);
     }
 
 

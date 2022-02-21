@@ -5,6 +5,7 @@ import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
 import com.trapped.utilities.TextParser;
 
+import javax.sound.sampled.Clip;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -215,7 +216,9 @@ class ActionController implements ActionListener {
         map.put("location", furniture);
         FileManager.writeJSON(map, furniturePuzzlesJsonPath);
         gHandler.mainFrame.writeToTextArea(noun + " has been added to your inventory");
-        Sounds.playSounds("pick.wav", 1000);
+        Clip pickClip=Sounds.getMusic("pick.wav");
+        Sounds.changeSoundVolume(pickClip, 0, 1);
+        pickClip.start();
         hideItemOnNavScreen(noun, getLocationBoolArr(location));
     }
 
@@ -235,7 +238,8 @@ class ActionController implements ActionListener {
         if (inventory.contains(item.toLowerCase())) {
             if (inventory.contains(item.toLowerCase())) {
                 inventory.remove(item);
-                Sounds.changeSoundVolume("drop.wav", 0, -20);
+                Clip dropClip=Sounds.getMusic("drop.wav");
+                dropClip.start();
                 furniture_items.add(item);
                 furniture.put("furniture_items", furniture_items);
                 map.put(location, furniture);
@@ -452,7 +456,9 @@ class ActionController implements ActionListener {
                         gHandler.mainFrame.windowWithoutKey.setVisible(true);
                         windowArr.set(6, false);
                         windowArr.set(7, true);
-                        Sounds.changeSoundVolume("glass_Breaking.wav", 0, -20);
+                        Clip glassBreaking=Sounds.getMusic("glass_Breaking.wav");
+                        Sounds.changeSoundVolume(glassBreaking, 0, -20);
+                        glassBreaking.start();
                         keyObtained = true;
                         break;
                     case "key":

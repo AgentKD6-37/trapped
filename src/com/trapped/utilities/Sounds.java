@@ -6,50 +6,45 @@ import java.io.IOException;
 
 public class Sounds {
 
-    public static void playSounds(String location_soundFile, int milliseconds) {
+    public static Clip getMusic(String location_soundFile) {
         File file = new File("resources/sounds/"+location_soundFile);
+        Clip clip = null;
 
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
-            Clip clip = AudioSystem.getClip();
+            clip = AudioSystem.getClip();
             clip.open(audioStream);
-            clip.start();
-            Thread.sleep(milliseconds);
+            FloatControl gainControl =
+                    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-20);
+            Thread.sleep(0);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | InterruptedException e) {
             e.printStackTrace();
         }
+
+        return clip;
     }
 
-    public static void changeSoundVolume(String location_soundFile, int milliseconds, float volume){
-        File file = new File("resources/sounds/"+location_soundFile);
-
+    public static void changeSoundVolume(Clip clip, int milliseconds, float volume){
         try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
             FloatControl gainControl =
                     (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue(volume);
             clip.start();
             Thread.sleep(milliseconds);
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public static void changeSoundVolumeLoop(String location_soundFile, int milliseconds, float volume){
-        File file = new File("resources/sounds/"+location_soundFile);
+    public static void changeSoundVolumeLoop(Clip clip, int milliseconds, float volume){
 
         try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            FloatControl gainControl =
-                    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue(volume);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
             Thread.sleep(milliseconds);
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

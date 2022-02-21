@@ -12,7 +12,7 @@ The game takes place in a mysterious room. The player has to explore the room, l
 
 
 ## Release Version
-Version 2.1
+Version 2.4
 What's new:
 > Full release complete!
 > 

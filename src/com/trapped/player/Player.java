@@ -3,6 +3,7 @@ package com.trapped.player;
 import com.google.gson.Gson;
 import com.trapped.utilities.*;
 
+import javax.sound.sampled.Clip;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -25,6 +26,9 @@ public class Player implements Serializable {
     private static String ANSWER;
     private static Scanner scan = new Scanner(System.in);
     private static final Player instance = new Player();
+    private static Clip puzzleClip=Sounds.getMusic("puzzle_sounds");
+    private static Clip pickClip=Sounds.getMusic("pick.wav");
+    private static Clip dropClip=Sounds.getMusic("drop.wav");
 
 
     static Map<String, Map<String, Object>> map = furniturePuzzleGenerator();
@@ -184,7 +188,8 @@ public class Player implements Serializable {
         map.put("location", furniture);
         FileManager.writeJSON(map, furniturePuzzlesJsonPath);
         System.out.println(noun + " has been added to your inventory");
-        Sounds.playSounds("pick.wav", 1000);
+        pickClip.start();
+//        Sounds.playSounds("pick.wav", 1000);
     }
 
     // quit game
@@ -209,7 +214,7 @@ public class Player implements Serializable {
         if (inventory.contains(item.toLowerCase())) {
             if (inventory.contains(item.toLowerCase())) {
                 inventory.remove(item);
-                Sounds.playSounds("drop.wav", 1000);
+                dropClip.start();
                 furniture_items.add(item);
                 furniture.put("furniture_items", furniture_items);
                 map.put(location, furniture);
@@ -453,7 +458,7 @@ public class Player implements Serializable {
                     // if user input correct answer
                     if (ANSWER.equals(furniture.get("easy_answer")) || randomAnswer.contains(ANSWER)) {
                         System.out.println(furniture.get("puzzle_reward"));
-                        Sounds.changeSoundVolume(puzzle_sounds, 1000, volume);
+                        Sounds.changeSoundVolume(puzzleClip, 1000, volume);
                         System.out.println("You found " + puzzle_reward_item.get(0) + ".");
                         pickUpItem(puzzle_reward_item.get(0));
                         solved = true;
@@ -510,11 +515,12 @@ public class Player implements Serializable {
                     System.out.println("Which of the item you'd like to use?");
                     String ans = scan.nextLine();
                     if ((ans.equalsIgnoreCase(puzzle_verb + " " + puzzle_itemsNeeded.get(0))) || ans.equalsIgnoreCase(puzzle_itemsNeeded.get(0))) {
-                        Sounds.changeSoundVolume(puzzle_sounds, 1000, volume);
+                        Sounds.changeSoundVolume(puzzleClip, 1000, volume);
                         System.out.println(puzzle_reward + " and you've found " + puzzle_reward_item.get(0));
                         inventory.remove(puzzle_itemsNeeded.get(0));
                         inventory.add(puzzle_reward_item.get(0));
-                        Sounds.changeSoundVolume("pick.wav", 1000, volume);
+
+                        Sounds.changeSoundVolume(pickClip, 1000, volume);
                         System.out.println("Added " + puzzle_reward_item.get(0) + " to your inventory");
                         playerInput();
                     } else if ((inventory.contains(ans) && (!ans.equals(puzzle_itemsNeeded)))) {
@@ -548,7 +554,7 @@ public class Player implements Serializable {
             while (max_attempts-- > 0) {
                 if (ANSWER.trim().equals(puzzle_answer)) {
                     System.out.println(puzzle_reward);
-                    Sounds.changeSoundVolume(puzzle_sounds, 2000, volume);
+                    Sounds.changeSoundVolume(puzzleClip, 2000, volume);
                     System.out.println("You won the game! Thanks for playing!");
                     System.exit(0);
                 } else if (max_attempts == 0) {

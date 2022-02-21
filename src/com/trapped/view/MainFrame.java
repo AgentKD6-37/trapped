@@ -3,6 +3,7 @@ package com.trapped.view;
 import com.trapped.Main;
 import com.trapped.utilities.Sounds;
 
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -30,6 +31,7 @@ public class MainFrame extends JFrame {
     public JTextArea textArea = new JTextArea();
     public TextField inputText = new TextField(20);
     public static float VOLUME;
+    private static final Clip clip =Sounds.getMusic("creepy_noise_3.wav");
 
     static List<Boolean> initArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false);
     static List<Boolean> invArr = Arrays.asList(false, false, false, false, false, false);
@@ -41,7 +43,9 @@ public class MainFrame extends JFrame {
         setUpMainMenu();
         showMainMenu();
         this.gHandler = gHandler;
-        Sounds.changeSoundVolumeLoop("creepy_noise_3.wav", 0, -20);
+        clip.start();
+        clip.loop(6);
+
     }
 
     public void setUpMainMenu() {
@@ -98,30 +102,21 @@ public class MainFrame extends JFrame {
 //    }
 
     public void changeVolume() {
-        JFrame frame = new JFrame("Volume Changer");
-        frame.setSize(200, 200);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        JOptionPane.showMessageDialog(frame, "Hello, this is the volume selector");
-        int result = JOptionPane.showConfirmDialog(null, "Do wish to change the volume? "
-        );
+        int result = JOptionPane.showConfirmDialog(null, "Do wish to change the volume?");
         switch (result) {
             case JOptionPane.YES_OPTION:
-                String name = JOptionPane.showInputDialog(null,
-                        "Please enter a number from -80 to 6 to change volume");
+                String name = JOptionPane.showInputDialog(null, "Please enter a number from -80 to 6 to change volume");
                 VOLUME = Float.parseFloat(name);
                 if (-80.0f <= VOLUME && VOLUME <= 6.0206f) {
-                    Sounds.changeSoundVolume("creepy_noise_3.wav", 0, VOLUME);
+                    Sounds.changeSoundVolume(clip, 0, VOLUME);
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Please enter a number from -80 to 6 to change volume");
-                    frame.dispose();
+                    JOptionPane.showMessageDialog(null, "Please enter a number from -80 to 6 to change volume");
                     changeVolume();
                     break;
                 }
                 break;
             case JOptionPane.NO_OPTION:
             case JOptionPane.CANCEL_OPTION:
-                frame.dispose();
                 break;
         }
     }
@@ -248,7 +243,9 @@ public class MainFrame extends JFrame {
 
         introText.setVisible(true);
         writeToIntro(readFileFromResources(fileName));
-        Sounds.changeSoundVolume("EvilLaugh.wav", 0, -50);
+        Clip clip2=Sounds.getMusic("EvilLaugh.wav");
+        Sounds.changeSoundVolume(clip2, 0, -10);
+        clip2.start();
         introText.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -308,7 +305,10 @@ public class MainFrame extends JFrame {
 
             }
         });
-        Sounds.changeSoundVolume("phone.wav", 0, -20);
+        Clip clip3 =Sounds.getMusic("phone.wav");
+        Sounds.changeSoundVolume(clip3, 0, -10);
+        clip3.start();
+
     }
 
     public void introScreenAfterPhone(String fileName) {
